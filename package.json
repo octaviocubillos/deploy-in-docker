@@ -4,8 +4,8 @@
   "description": "A simple TypeScript CLI to manage local Docker containers",
   "main": "dist/index.js",
   "scripts": {
-    "_build": "tsc",
-    "build": "esbuild src/index.ts --bundle --minify --platform=node --outfile=dist/dd-cli.min.js && cp node dist",
+    "build": "tsc",
+    "releases": "esbuild src/index.ts --bundle --minify --platform=node --outfile=releases/dd-cli.min.js",
     "cli": "ts-node src/index.ts"
   },
   "dependencies": {
