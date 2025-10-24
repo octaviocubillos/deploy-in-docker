@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+node
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
