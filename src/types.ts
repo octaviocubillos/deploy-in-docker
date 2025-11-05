@@ -9,3 +9,8 @@ export interface ManageOptions {
 export interface Manage {
     ps: Function
 }
+export interface Profile {
+    host: string;
+    mode: "docker";
+    protocol: "ssh" | "local"
+}

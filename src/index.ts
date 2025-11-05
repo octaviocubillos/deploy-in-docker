@@ -3,82 +3,115 @@
 import { Command } from 'commander';
 import { FileStack } from './config';
 import manages from './manages';
+import { handleError } from './handlers';
+import chalk from 'chalk';
 
 
 const program = new Command();
 
-program
-  .version('1.0.0')
-  .description('Un CLI simple para gestionar Docker local');
-
 
 program
-  .option('-f, --file <path>', 'Ruta del archivo para leer los datos', 'stack.yaml')
-  .option('-p, --profile <str>', 'profileprofile', 'default');
+	.name("did")
+	.version('0.0.0')
+	.description('Una herramienta CLI para desplegar y gestionar aplicaciones en contenedores Docker, ya sea de forma local o remota, utilizando un archivo de configuración stack.yaml.')
+	.option('-f, --file <path>', 'Especifica la ruta al archivo de configuración del stack.', 'stack.yaml')
+	.option('-p, --profile <string>', 'Define el perfil a utilizar del archivo de configuración.', 'default')
+	.addHelpText('after', `
+Ejemplos de uso:
+  $ did deploy -r my-service
+  $ did -f /path/to/stack.yaml -p production ps
+  $ did logs -f -c my-container`);
 
-  
-program.parse(process.argv);
+const globalOptions = program.opts(); 
 
-const stack = new FileStack(program.opts())
+const getInterface = () => {
+	const stack = new FileStack(globalOptions);
+	const profile = stack.getProfile();
+	const manage = manages[profile.mode]
 
-const profile = stack.getProfile()
+	if(!manage){
+		return handleError(`Error al obtener manage: ${profile.mode}`);
+	}
 
-if (!profile){
-  console.error(`Error al obtener profile: ${program.opts().profile}`);
-  process.exit(1);
+	return new manage(stack);
 }
-
-const manage = manages[profile.mode];
-
-if(!manage){
-  console.error(`Error al obtener profile: ${program.opts().profile}`);
-  process.exit(1);
-}
-
-const instance = new manage(profile.protocol  == 'local' ? undefined : profile);
-
-program
-  .command('ps')
-  .description('Listar contenedores')
-  .option('-a, --all', 'Mostrar todos los contenedores (incluidos detenidos)', false)
-  .option('-o', 'oooo', false)
-  .action(instance.ps);
 
 program
   .command('deploy')
-  .description('deploy')
-  .option('-f, --file <path>', 'Ruta del archivo para leer el nombre')
-  .action(() => instance.deploy(stack))
+  .description('Construye y despliega los servicios definidos en el stack.')
+  .option('-r, --resource <name...>', 'Nombre(s) de los recursos específicos a desplegar.')
+  .action(async (options: { resource?: string[] }) => { 
+    try {
+		const instance = getInterface();
+		await instance.deploy(options.resource);
+    } catch (error) {
+      	handleError(error);
+    }
+  })
+  .addHelpText('after', `
+Ejemplos:
+  $ did deploy
+  $ did deploy -r api-gateway database`);
 
-// --- Comando: start ---
-// program
-//   .command('start <id>')
-//   .description('Iniciar un contenedor por ID o nombre')
-//   .action(async (id: string) => {
-//     try {
-//       console.log(chalk.blue(`Iniciando contenedor '${id}'...`));
-//       const container = docker.getContainer(id);
-//       await container.start();
-//       console.log(chalk.green(`Contenedor '${id}' iniciado exitosamente.`));
-//     } catch (error) {
-//       handleError(error);
-//     }
-//   });
+program
+  .command('config')
+  .description('Muestra la configuración del stack que se está utilizando.')
+  .action(() => {
+	try {
+		const stack = new FileStack(globalOptions);
+		console.log(chalk.green('¡Archivo de configuración cargado!'));
+		console.log(JSON.stringify(stack.config, null, 2));
+	} catch (error) {
+		handleError(error);
+	}
+  });
 
-// --- Comando: stop ---
-// program
-//   .command('stop <id>')
-//   .description('Detener un contenedor por ID o nombre')
-//   .action(async (id: string) => {
-//     try {
-//       console.log(chalk.blue(`Deteniendo contenedor '${id}'...`));
-//       const container = docker.getContainer(id);
-//       await container.stop();
-//       console.log(chalk.yellow(`Contenedor '${id}' detenido exitosamente.`));
-//     } catch (error) {
-//       handleError(error);
-//     }
-//   });
+program
+	.command('ps')
+	.alias('ls')
+	.description('Lista los contenedores asociados al stack del perfil actual.')
+	.option('-a, --all', 'Mostrar todos los contenedores (en ejecución y detenidos).', false)
+	.action(async (options: { all: boolean }) => {
+			const instance = getInterface();
+			await instance.ps(options);
+	})
+	.addHelpText('after', `
+Ejemplos:
+  $ did ps
+  $ did ps -a`);
 
-// Parsear los argumentos y ejecutar el comando
-program.parse(process.argv);
+program
+	.command('remove')
+	.alias('rm')
+	.description('Detiene y elimina los contenedores asociados al stack.')
+	.action(async () => {
+		const instance = getInterface();
+		await instance.removeStack();
+	});
+
+program
+	.command('logs')
+	.description('Muestra los logs de los contenedores del stack.')
+	.option('-t, --tail <number>', 'Número de líneas a mostrar desde el final de los logs.', '100')
+  	.option('-f, --follow', 'Seguir la salida de los logs en tiempo real.', false)
+	.option('-c, --container <name_or_id...>', 'Nombre(s) o ID(s) de contenedores específicos.')
+	.action(async (options: { tail: string, follow: boolean,container?: string[] }) => {
+		const instance = getInterface();
+		const tailCount = parseInt(options.tail, 10);
+		if (isNaN(tailCount) || tailCount <= 0) {
+			handleError(new Error('--tail debe ser un número positivo.'));
+			return;
+		}
+		await options.follow ? instance.followStackLogs(tailCount, options.container) : instance.showStackLogs(tailCount, options.container);
+	})
+	.addHelpText('after', `
+Ejemplos:
+  $ did logs
+  $ did logs -f
+  $ did logs -t 200 -c my-container`);
+
+try {
+   program.parse(process.argv);
+} catch (error) {
+    handleError(error);
+}
