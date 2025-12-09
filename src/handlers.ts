@@ -1,40 +1,32 @@
-import chalk from "chalk";
-import { Readable } from "stream";
+import { logger } from './logger';
+import { Readable } from 'stream';
 
-export function handleError(error: string|unknown) {
+export const handleError = (error: any) => {
+  let errorMessage: string;
+
   if (error instanceof Error) {
-    if ((error as any).statusCode === 404) {
-      console.error(chalk.red('Error: Contenedor no encontrado.'));
-    } else if ((error as any).code === 'ECONNREFUSED' || (error as any).errno === -111) {
-      console.error(chalk.red('Error: No se pudo conectar a Docker.'));
-      console.log(chalk.yellow('¿Estás seguro de que Docker está corriendo?'));
-    } else {
-      console.error(chalk.red(`Error: ${error.message}`));
-    }
+    errorMessage = error.message;
   } else if (typeof error == "string") {
-    console.error(chalk.red(`Error: ${error}`));
-    console.error(chalk.red(`Ejecuta did -h o deploy-in-docker -h para obtener ayuda`));
+    errorMessage = error;
   } else {
-    console.error(chalk.red('Ocurrió un error desconocido.'));
+    errorMessage = 'Ocurrió un error desconocido.';
+  }
+  logger.error(errorMessage);
+  // Opcional: mantener la ayuda para errores de CLI
+  if (typeof error !== 'object' || !('command' in error)) {
+      logger.info(`Ejecuta oton-pilot --help para obtener ayuda.`);
   }
   process.exit(1); // Salir con código de error
+
 }
 
 export const streamToString = (stream: Readable | NodeJS.ReadableStream): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    stream.on('data', (chunk: Buffer) => {
-      chunks.push(chunk); // Collect chunks as Buffers
-    });
-    stream.on('error', (err) => {
-      // Handle stream errors
-      console.error(chalk.red("[streamToString]: Error reading stream"), err);
-      reject(err);
-    });
-    stream.on('end', () => {
-      resolve(Buffer.concat(chunks).toString('utf8'));
-    });
-  });
+	const chunks: Buffer[] = [];
+	return new Promise((resolve, reject) => {
+	  stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+	  stream.on('error', (err) => reject(err));
+	  stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+	});
 };
 
 export const deepMergeObjects = (...objects:any) => {

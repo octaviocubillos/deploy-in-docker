@@ -1,8 +1,10 @@
 import { Resource } from "../config";
 import { handleError } from "../handlers";
 import collection from "./collection";
+import mongodb from "./mongodb";
 import nginx from "./nginx"
 import node22 from "./node22"
+import Docker from "dockerode";
 
 
 export interface ProcessParams {
@@ -20,11 +22,13 @@ export interface ProcessParams {
 
 export interface ITemplate {
     name: string;
-    process(params: Resource): boolean;
-    dockerfileTemplate: string;
+    type?: 'service' | 'task';
+    process(params: Resource, manager?: any): boolean | Promise<boolean>;
+    dockerfileTemplate?: string;
     port?: number;
     requireVolume?: boolean;
     volume?: string;
+    postProcess?(resource: Resource, manager?: any): Promise<void>;
 }
 
 export default class {
@@ -34,6 +38,7 @@ export default class {
         this.register(nginx);
         this.register(node22);
         this.register(collection);
+        this.register(mongodb)
     }
 
     register = (template: ITemplate): void => {

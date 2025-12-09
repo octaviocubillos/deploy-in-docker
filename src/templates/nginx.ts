@@ -8,6 +8,7 @@ export default new class {
 
     process = (resource: Resource) => {
         const filename = "nginx.conf";
+        const serverName = resource.props?.serverName || resource.props?.server_name;
         const text = `
 user nginx;
 worker_processes auto;
@@ -21,12 +22,18 @@ http {
     keepalive_timeout  65;
     server {
         listen ${resource.spec?.port || 80};
-        server_name  localhost;
+        server_name ${ serverName || '_'};
+        root   /usr/share/nginx/html;
+        index  ${resource.handler || 'index.html index.htm'};
         location / {
-            root   /usr/share/nginx/html;
-            index  ${resource.handler || 'index.html index.htm'};
+            try_files $uri $uri/ =404;
         }
     }
+    ${serverName? `server {
+        listen 80 default_server;
+        server_name _;
+        return 403;
+    }`: ``}
 }`;
 
         fs.writeFileSync(path.join(resource.folder.deploy, filename), text);

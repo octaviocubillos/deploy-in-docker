@@ -3,18 +3,16 @@ import Docker from 'dockerode';
 import Table from 'cli-table3';
 import path from 'path';
 import fs from 'fs';
-import readline from 'readline/promises'; 
+import readline from 'node:readline/promises';   
 
 import { deepMergeObjects, handleError, streamToString } from '../handlers';
 import { Manage, Profile } from '../types';
 import { FileStack, Resource } from '../config';
 import * as tar from 'tar-fs'; 
 
-import Templates from '../templates';
 import spinner from '../spinner';
 import { Readable, Writable } from 'stream'; // Importa Writable también
 import { PassThrough } from 'stream'; // Para crear streams intermedios
-import { version } from 'os';
 
 
 
@@ -27,8 +25,6 @@ export class DockerManage implements Manage {
     profile: Profile;
     docker: Docker;
 
-    deployFolder: string = ".deploy"
-
     constructor(stack: FileStack) {
         this.profile = stack.getProfile()
         this.stack = stack;
@@ -36,20 +32,149 @@ export class DockerManage implements Manage {
     }
 
     deploy = async (resourceOptions?: string[]) => {
+
         console.log(`Comenzando despliegue a: [${this.profile.protocol}]${this.profile.host || ""}`)
-        const resources = this.stack.getResources(resourceOptions);
-        for( const resource of resources) {
+        const service  = this.stack.getService();
+        
+        const lastStatus = await service.getLast(this.stack.name);
+
+        console.log({lastStatus});
+        
+        let resources = this.stack.getResources(resourceOptions);
+
+        console.log("Calculando diferencias con el despliegue anterior...");
+        
+        const lastResourcesMap = new Map<string, { name: string; version?: string }>();
+
+        if (lastStatus?.resources) {
+            lastStatus.resources.forEach((r: { name: string; version?: string }) => lastResourcesMap.set(r.name, r));
+        }
+
+        const currentResourcesMap = new Map<string, Resource>();
+        resources.forEach(r => currentResourcesMap.set(r.name, r));
+        const added: Resource[] = [];
+        const removed: { name: string; version?: string }[] = [];
+        const updated: { old: { name: string; version?: string }; new: Resource }[] = [];
+  
+        for (const [name, currentResource] of currentResourcesMap.entries()) {
+            if (!lastResourcesMap.has(name)) {
+                console.log(String(Number(currentResource.version || 0) + 1))
+                added.push({...currentResource, version: String(Number(currentResource.version || 0) + 1)});
+            } else {
+                const lastResource = lastResourcesMap.get(name)!;
+                currentResource.version ||= String(Number(lastResource.version || 0) + 1);
+                if (lastResource.version !== currentResource.version) {
+                    updated.push({ old: lastResource, new: currentResource});
+                }
+            }
+        }
+
+        // Identify removed resources
+        for (const [name, lastResource] of lastResourcesMap.entries()) {
+            if (!currentResourcesMap.has(name)) {
+                removed.push(lastResource);
+            }
+        }
+
+        if (added.length > 0) {
+            console.log(chalk.green('  Recursos nuevos:'));
+            added.forEach(r => console.log(chalk.green(`    + ${r.name}`)));
+        }
+        if (removed.length > 0) {
+            console.log(chalk.red('  Recursos eliminados:'));
+            removed.forEach(r => console.log(chalk.red(`    - ${r.name}`)));
+        }
+        if (updated.length > 0) {
+            console.log(chalk.yellow('  Recursos actualizados:'));
+            updated.forEach(u => console.log(chalk.yellow(`    ~ ${u.new.name} (v${u.old.version || 'N/A'} -> v${u.new.version || 'N/A'})`)));
+        }
+
+        if (added.length === 0 && removed.length === 0 && updated.length === 0) {
+            console.log(chalk.dim('  No se encontraron cambios en los recursos.'));
+            // return;
+        }
+        
+        // if (added.length > 0 || removed.length > 0 || updated.length > 0) {
+        //     const rl = readline.createInterface({
+        //         input: process.stdin,
+        //         output: process.stdout
+        //     });
+        //     const answer = await rl.question(chalk.yellow('¿Desea continuar con el despliegue? (y/N): '));
+            
+        //     rl.close();
+        //     if (!['y', 'yes'].includes(answer.toLowerCase())) {
+        //         spinner.fail('Despliegue cancelado por el usuario.');
+        //         return;
+        //     }
+        // }
+// forEach(r => r.updateStatus("PROCESSING"));
+        console.log({added, removed, updated, resources});
+
+        const deploy = await service.create(this.stack.name, {
+            status: "PROCESSING",
+            resources: resources.map(r => ({
+                name: r.name,
+                version: r.version || 1,
+                status: "PENDING"
+            }))
+        });
+        
+        for( const resource of resources as Resource[]) {
             console.log(`Desplegando ${this.stack.name}-${resource.name}`);
+            resource.version ||= "1";
+            resource.updateStatus = async (status: string, log?: string) => {
+                console.log(`Actualizando estado de ${this.stack.name}-${resource.name} a ${status}, con log: ${log}`);
+                await service.update({
+                    stackName: this.stack.name,
+                    id: deploy.id,
+                    resources: (deploy.resources || []).map(r => {
+                        if (r.name === resource.name) {
+                            r.status = status;
+                            if(log) (r as any).taskLog = [...((r as any).taskLog || []), log];
+                        }
+                        return r;
+                    })
+                });
+                if(status === "ERROR" || status === "FAILED") {
+                    await service.update({
+                        stackName: this.stack.name,
+                        id: deploy.id,
+                        status: status
+                    });
+                }
+            }
+            
+            await resource.updateStatus("PROCESSING");
 
-            resource.version = await this.getNextVersion(resource.name);
+            const isTask = resource.templateObj.type === 'task';
 
-            resource.templateObj.process(resource)
+            await resource.templateObj.process(resource, this);
+    
+            if (isTask) {
+                if (resource.templateObj.postProcess) {
+                    await resource.templateObj.postProcess(resource, this);
+                }
+                console.log(`Tarea ${resource.name} completada.`);
+                continue; // Skip to next resource
+            }
             
             resource.imageName = await this.createImage(resource)
-            await this.clean(resource.name)
+            await this.clean(resource)
             await this.start(resource);
 
+            await service.addProxy(resource.name, resource.extra.hostname);
+            console.log(resource.extra);
+
+            await resource.updateStatus("SUCCESS");
         }
+
+        await service.update({
+            stackName: this.stack.name,
+            id: deploy.id,
+            status: "SUCCESS"
+        });
+
+        console.log("Despliegue completado y estado guardado.");
     }
 
     ps = async (options: { all: boolean }) => {
@@ -66,14 +191,11 @@ export class DockerManage implements Manage {
             })).filter(container => {
                 return container.Labels && Object.entries(container.Labels).find(([k, v]) => k == 'stack' && v == this.stack.name);
             });
-
     
             if (containers.length === 0) {
                 console.log(chalk.yellow('No se encontraron contenedores.'));
                 return;
             }
-
-            containers.forEach(c => console.log(c.Ports))
 
             const table = new Table({
                 head: [
@@ -86,7 +208,7 @@ export class DockerManage implements Manage {
                     chalk.cyan('PrivatePorts')
                 ]
             });
-            console.log(containers[0].HostConfig)
+            
             containers.forEach(c => {
                 table.push([
                     c.Id.substring(0, 12),
@@ -352,29 +474,29 @@ export class DockerManage implements Manage {
             let errorCount = 0;
 
             for (const containerInfo of containers) {
-            const containerIdShort = containerInfo.Id.substring(0, 12);
-            const containerNames = containerInfo.Names.map(n => n.replace('/', '')).join(', ');
-            process.stdout.write(chalk.dim(`  Processing: ${containerNames} (${containerIdShort})... `)); // Use write to stay on the same line
+                const containerIdShort = containerInfo.Id.substring(0, 12);
+                const containerNames = containerInfo.Names.map(n => n.replace('/', '')).join(', ');
+                process.stdout.write(chalk.dim(`  Processing: ${containerNames} (${containerIdShort})... `)); // Use write to stay on the same line
 
-            try {
-                const container = this.docker.getContainer(containerInfo.Id);
-                process.stdout.write(chalk.dim('Stopping... '));
-                await container.stop().catch(err => {
-                    if ((err as any)?.statusCode !== 304 && !err.message.includes('Container already stopped')) { // 304 = Not Modified (already stopped)
-                        process.stdout.write(chalk.yellow(`(warn: ${err.message}) `)); // Show other stop errors as warnings
-                    } else {
-                        process.stdout.write(chalk.dim('(already stopped) '));
-                    }
-                });
-                
-                process.stdout.write(chalk.dim('Removing container... '));
-                await container.remove({ force: false }); // force: false is safer, stop should have worked
-                
-                const image = this.docker.getImage(containerInfo.Image);
-                process.stdout.write(chalk.dim('Removing Image... '));
-                await image.remove({ force: true });
-                console.log(chalk.green('OK.'));
-                successCount++;
+                try {
+                    const container = this.docker.getContainer(containerInfo.Id);
+                    process.stdout.write(chalk.dim('Stopping... '));
+                    await container.stop().catch(err => {
+                        if ((err as any)?.statusCode !== 304 && !err.message.includes('Container already stopped')) { // 304 = Not Modified (already stopped)
+                            process.stdout.write(chalk.yellow(`(warn: ${err.message}) `)); // Show other stop errors as warnings
+                        } else {
+                            process.stdout.write(chalk.dim('(already stopped) '));
+                        }
+                    });
+                    
+                    process.stdout.write(chalk.dim('Removing container... '));
+                    await container.remove({ force: false }); // force: false is safer, stop should have worked
+                    
+                    const image = this.docker.getImage(containerInfo.Image);
+                    process.stdout.write(chalk.dim('Removing Image... '));
+                    await image.remove({ force: true });
+                    console.log(chalk.green('OK.'));
+                    successCount++;
 
                 } catch (containerError) {
                     console.log(chalk.red('FAIL.')); // New line after fail
@@ -396,10 +518,10 @@ export class DockerManage implements Manage {
         }
     }
 
+
     private start = async (resource: Resource) => {
         try {
             const {imageName, spec, name, version, environment, templateObj} = resource;
-        
             console.log(chalk.blue(`Iniciando contenedor '${name}' con la image '${imageName}'...`));
 
             spec.networks ||= []
@@ -411,20 +533,26 @@ export class DockerManage implements Manage {
 
             environment.PORT ||= spec.port;
 
-            
+            resource.extra = {
+                hostname: spec.hostname || `${name}.${this.stack.name}`.toLowerCase(),
+            }
+
+            let containerName = this.stack.name + '-' + name;
+            if(version) containerName += `-${version}`;
             const container = await this.docker.createContainer({
                 Image: imageName,
-                name: `${name}-${version}`,
+                name: containerName,
                 Env: this.formatEnvironment(environment),
-                Hostname: spec.hostname || `${this.stack.name}.${name}`.toLowerCase(),
+                Hostname: resource.extra?.hostname,
                 ExposedPorts: spec.port ? {
                     [`${spec.port}/tcp`]: {}
                 }: {},
                 Labels: {
                     ...spec.label, 
-                    "deploy-in-docker": "0.0.0", 
-                    "stack": this.stack.name,
-                    "com.docker.compose.project": this.stack.name
+                    "oton-pilot-cli": "0.0.1", 
+                    "oton-pilot-service": "0.0.1",
+                    "stack": resource.stack || this.stack.name,
+                    "com.docker.compose.project": resource.stack || this.stack.name
                 },
                 HostConfig: {
                     Binds: templateObj.volume ? [
@@ -434,7 +562,7 @@ export class DockerManage implements Manage {
                         [`${templateObj.port || spec.port}/tcp`]: [{ HostPort: `${spec.port}` }]
                     } : {},
                     RestartPolicy: {
-                        Name: spec.restart || ""
+                        Name: spec.restart || "unless-stopped"
                     } ,
                     CpuPeriod: 100000,
                     CpuQuota: spec.cpus ? 100000 * parseFloat(spec.cpus): undefined,
@@ -454,7 +582,9 @@ export class DockerManage implements Manage {
 
             await container.start();
             console.log(chalk.green(`Contenedor '${imageName}' iniciado exitosamente.`));
+            await resource.updateStatus("PROCESSING", `STARTED: Contenedor '${imageName}' iniciado exitosamente.`);
         } catch (error) {
+            await resource.updateStatus("ERROR", `STARTED: ${ (error as Error).message}`);
             handleError(error);
         }
     }
@@ -486,11 +616,11 @@ export class DockerManage implements Manage {
         return last + 1
     }
 
-    private createImage = async (resource: Resource) => {  
+    private createImage = async (resource: Resource, imageName?: string) => {  
         console.log(`ℹ️  Creando nueva imagen para el despliegue`)
         const {templateObj} = resource;
 
-        let dockerFile = templateObj.dockerfileTemplate;
+        let dockerFile = templateObj.dockerfileTemplate!;
         for (const str of ['handler', 'port', 'imageName']) {
             if (dockerFile.includes(`{${str}}`)) {
                 (resource as any)[str] && (dockerFile = dockerFile.replaceAll(`{${str}}`, (resource as any)[str]));
@@ -498,12 +628,11 @@ export class DockerManage implements Manage {
             }
         }
         fs.writeFileSync(path.join(resource.folder.deploy, "Dockerfile"), dockerFile);
-
-        const imageName = `${this.stack.name}-${resource.name}:${resource.version}`.toLowerCase();
+        imageName ||= `${this.stack.name}-${resource.name}:${resource.version}`.toLowerCase();
         const options :Docker.ImageBuildOptions  = {
             t: imageName,
             dockerfile: 'Dockerfile',
-            labels: {"dd-cli": "0.0.0"}, 
+            labels: {"oton-pilot": "0.0.0"}, 
             forcerm: true
         };
         
@@ -547,24 +676,26 @@ export class DockerManage implements Manage {
             }
 
             spinner.succeed(`Imagen '${imageName}' compilada exitosamente.`);
+            await resource.updateStatus("PROCESSING", `COMPILED: Imagen '${imageName}' compilada exitosamente.`);
             return imageName;
         } catch (err) {
-            const error = err as any;
+            const error = err as Error;
+            await resource.updateStatus("ERROR", `COMPILED: Error al compilar la imagen: ${error.message}`);
             handleError(`Error al compilar la imagen: ${error.message}`)
             return "";
         }
     }
 
-    private clean = async (name:string, containersToKeep: number = 5) => {
+    clean = async (resource: Resource, containersToKeep: number = 5) => {
         console.log(`ℹ️  Obteniendo contenedores para limpieza `)
-        spinner.succeed(`Buscando contenedores con prefijo '${name}' para limpiar...`)
-        const filtros = { name: [ `^/${name}-.*` ] };
+        spinner.succeed(`Buscando contenedores con prefijo '${resource.name}' para limpiar...`)
+        const filtros = { name: [ `^/${resource.name}-.*` ] };
 
         try {
             const containers = await this.docker.listContainers({ all: true, filters: filtros });
 
             if (!containers.at(0)) {
-                spinner.info(`No se encontraron contenedores que coincidan con el nombre '${name}'.`);
+                spinner.info(`No se encontraron contenedores que coincidan con el nombre '${resource.name}'.`);
                 return;
             }
 
@@ -584,7 +715,7 @@ export class DockerManage implements Manage {
 
             containers.sort((a, b) => b.Created - a.Created);
 
-            const containersToRemove = containers.slice(5-1);
+            const containersToRemove = containers.slice(containersToKeep-1);
 
             if (!containersToRemove.at(0)) {
                 spinner.succeed(chalk.green(`No hay suficientes contenedores para eliminar. Se conservan los ${containersToKeep} más recientes.`));
@@ -602,14 +733,18 @@ export class DockerManage implements Manage {
                 spinner.change(`Eliminando contenedor: ${name} (${containerId.substring(0, 12)})`);
                 await container.remove({ force: true });
                 const image = this.docker.getImage(containerInfo.Image);
-                await image.remove({ force: true });
+                const imageRemoved = await image.remove({ force: true });
+                spinner.succeed(`imagen ${name} (${containerId.substring(0, 12)}) eliminada exitosamente`)
             }
-
-            spinner.succeed(chalk.green(`Proceso completado. Se eliminaron ${containersToRemove.length} contenedores.`));
-
+            const msg = `Proceso completado. Se eliminaron ${containersToRemove.length} contenedores.`;
+            spinner.succeed(chalk.green(msg));
+            resource.updateStatus("PROCESSING", `CLEANUP: ${msg}`);
+            return true;
         } catch (err) {
             spinner.fail(chalk.red(`Ocurrió un error al limpiar los contenedores: ${err}`));
             console.error(err);
+            resource.updateStatus("ERROR", `CLEANUP: Ocurrió un error al limpiar los contenedores: ${String(err)}`);
+            return false;
         }
         return true;
     }

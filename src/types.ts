@@ -12,5 +12,17 @@ export interface Manage {
 export interface Profile {
     host: string;
     mode: "docker";
-    protocol: "ssh" | "local"
+    protocol: "ssh" | "local",
+    mongodb?: {
+        username: string;
+        password?: string;
+        host?: string;
+        port?: number;
+    };
+    service?: {
+      host: string;
+      port: number;
+    }
+    environment?: {[key: string]: any}; // Allow mixed types (string | object | number | boolean | null)
+    resources?: {[resourceName: string]: { environment?: {[key: string]: string} }};
 }
