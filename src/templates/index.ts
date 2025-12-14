@@ -4,7 +4,10 @@ import collection from "./collection";
 import mongodb from "./mongodb";
 import nginx from "./nginx"
 import node22 from "./node22"
-import Docker from "dockerode";
+import python311 from "./python311"
+
+
+import service from "./service"
 
 
 export interface ProcessParams {
@@ -23,7 +26,7 @@ export interface ProcessParams {
 export interface ITemplate {
     name: string;
     type?: 'service' | 'task';
-    process(params: Resource, manager?: any): boolean | Promise<boolean>;
+    process(params: Resource): boolean | Promise<boolean>;
     dockerfileTemplate?: string;
     port?: number;
     requireVolume?: boolean;
@@ -36,9 +39,11 @@ export default class {
 
     constructor() {
         this.register(nginx);
-        this.register(node22);
         this.register(collection);
         this.register(mongodb)
+        this.register(node22)
+        this.register(python311)
+        this.register(service)
     }
 
     register = (template: ITemplate): void => {

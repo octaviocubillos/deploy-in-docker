@@ -22,6 +22,9 @@ export interface Profile {
     service?: {
       host: string;
       port: number;
+      proxyHost?: string;
+      proxyPort?: number;
+      network?: string;
     }
     environment?: {[key: string]: any}; // Allow mixed types (string | object | number | boolean | null)
     resources?: {[resourceName: string]: { environment?: {[key: string]: string} }};

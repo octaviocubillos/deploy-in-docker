@@ -16,7 +16,8 @@ export const handleError = (error: any) => {
   if (typeof error !== 'object' || !('command' in error)) {
       logger.info(`Ejecuta oton-pilot --help para obtener ayuda.`);
   }
-  process.exit(1); // Salir con código de error
+  throw error;
+  // process.exit(1); // Salir con código de error
 
 }
 

@@ -5,8 +5,6 @@ import { FileStack } from './config';
 import manages from './manages';
 import { handleError } from './handlers';
 import chalk from 'chalk';
-import { getDb, closeDbConnection } from './database';
-import { DockerManage } from './manages/docker';
 import * as crypto from 'crypto';
 import spinner from './spinner';
 import { saveLocalConfig } from './user-config';
@@ -32,19 +30,15 @@ const getInterface = async () => {
 	console.log('obteniendo interface...');
 	const stack = new FileStack(globalOptions);
 
-	if (!await stack.getService().isServiceRunning()) {
-		console.log('El servicio no está corriendo.');
-		return handleError('El servicio no está corriendo.');
-	}
-
 	const profile = stack.getProfile();
-	const manage = manages[profile.mode]
-
-	if (!manage) {
+	const Manage = manages[profile.mode]
+	if (!Manage) {
 		return handleError(`Error al obtener manage: ${profile.mode}`);
 	}
 
-	return new manage(stack);
+	const manage = new Manage(stack);
+	
+	return await manage.ensurePilotService() ? manage : handleError('Error asegurando el servicio piloto.');
 }
 
 
@@ -158,22 +152,27 @@ program
 	.command('logs')
 	.description('Muestra los logs de los contenedores del stack.')
 	.option('-t, --tail <number>', 'Número de líneas a mostrar desde el final de los logs.', '100')
-	.option('-f, --follow', 'Seguir la salida de los logs en tiempo real.', false)
-	.option('-c, --container <name_or_id...>', 'Nombre(s) o ID(s) de contenedores específicos.')
-	.action(async (options: { tail: string, follow: boolean, container?: string[] }) => {
+	.option('-fl, --follow', 'Seguir la salida de los logs en tiempo real.', false)
+	.option('-r, --resource <name...>', 'Nombre(s) de los recursos específicos.')
+	.option('-a, --all', 'Mostrar todos los contenedores (en ejecución y detenidos).', false)
+	.action(async (options: { tail: string, follow: boolean, resource?: string[], all?: boolean }) => {
 		const instance = await getInterface();
 		const tailCount = parseInt(options.tail, 10);
 		if (isNaN(tailCount) || tailCount <= 0) {
 			handleError(new Error('--tail debe ser un número positivo.'));
 			return;
 		}
-		await options.follow ? instance.followStackLogs(tailCount, options.container) : instance.showStackLogs(tailCount, options.container);
+		if (options.follow) {
+			await instance.followStackLogs(tailCount, options.resource, options.all);
+		} else {
+			await instance.showStackLogs(tailCount, options.resource, options.all);
+		}
 	})
 	.addHelpText('after', `
 Ejemplos:
   $ oton-pilot logs
   $ oton-pilot logs -f
-  $ oton-pilot logs -t 200 -c my-container`);
+  $ oton-pilot logs -t 200 -r lambda-python-test`);
 
 try {
 	program.parse(process.argv);

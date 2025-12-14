@@ -20,7 +20,7 @@ export default class Service {
 
     execute = async (method: string, path: string, body?: any) => {
         try {
-            console.log(`${method} ${this.url}${path}`)
+            // console.log(`${method} ${this.url}${path}`)
             const response = await fetch(`${this.url}${path}`, {
                 method,
                 headers: {
@@ -38,7 +38,6 @@ export default class Service {
     isServiceRunning = async () => {
         try {
             const response = await this.execute('GET', '/api/service/health');
-            console.log({response})
             return response.success;
         } catch (error) {
             return false;
@@ -83,14 +82,42 @@ export default class Service {
         }
     };
 
+    getProxy = async (subdomain: string, last?: boolean): Promise<any> => {
+        try {
+            const response = await this.execute('GET', `/api/proxy/?subdomain=${subdomain}${last ? '&last': ''}`);
+            return response.data;
+        } catch (error) {
+            return null;
+        }
+    };
+
     addProxy = async (subdomain: string, target: string): Promise<boolean> => {
         try {
-            console.log(`Adding proxy for ${subdomain} -> ${target}`);
-            const response = await this.execute('POST', `/api/proxy`, { subdomain, target: target + ":3000" });
-            console.log({response})
+            const response = await this.execute('POST', `/api/proxy`, { subdomain, target });
             return response.success;
         } catch (error) {
             console.error("Error adding proxy:", error);
+            return false;
+        }
+    };
+
+    updateProxy = async (id: number, subdomain: string, target: string): Promise<boolean> => {
+        try {
+            console.log(`Updating proxy for ${subdomain} -> ${target}`);
+            const response = await this.execute('PUT', `/api/proxy/${id}`, { subdomain, target });
+            return response.success;
+        } catch (error) {
+            console.error("Error updating proxy:", error);
+            return false;
+        }
+    };
+
+    deleteProxy = async (id: number): Promise<boolean> => {
+        try {
+            const response = await this.execute('DELETE', `/api/proxy/${id}`);
+            return response.success;
+        } catch (error) {
+            console.error("Error deleting proxy:", error);
             return false;
         }
     };
@@ -99,7 +126,6 @@ export default class Service {
         try {
             console.log(`Adding proxy for ${subdomain} -> ${target}`);
             const response = await this.execute('POST', `/api/proxy`, { subdomain, target: target + ":3000" });
-            console.log({response})
             return response.success;
         } catch (error) {
             console.error("Error adding proxy:", error);

@@ -29,7 +29,9 @@ interface Spec {
 
 export interface Resource {
     name: string;
+    fullName: string;
     version?: string | number;
+    proxy?: boolean;
     handler: string;
     codeUri: string;
     path: string;
@@ -47,8 +49,9 @@ export interface Resource {
     imageName?: string;
     stack?: string;
     status?: string;
-    updateStatus: (status: string, log?: string) => Promise<void>;
+    updateStatus: (status: string, log?: string, extraData?: object) => Promise<void>;
     extra: {[x: string]: string};
+    preDeploy?: string;
 }
 
 export class FileStack {
@@ -61,12 +64,15 @@ export class FileStack {
   templates!: Template;
 
   service!: Service;
+  projectPath!: string;
+  profile!: Profile;
 
   constructor(globalOptions: OptionValues){
     this.options = globalOptions;
     console.log('obteniendo stack...');
     try {
       this.stack = fs.readFileSync(globalOptions.file, 'utf-8').trim();
+      this.projectPath = path.dirname(path.resolve(globalOptions.file));
       this.config = yaml.load(this.stack) as {[x: string]: any};
 
       // Load external profile.yaml if exists and merge
@@ -92,7 +98,12 @@ export class FileStack {
   }
 
   getProfile = (): Profile => {
+    
     const profileName = this.options.profile;
+
+    if(this.profile) {
+      return this.profile;
+    }
     const profile = this.config.profile[profileName];
     profile.name = profileName;
     if (!profile) {
@@ -106,8 +117,11 @@ export class FileStack {
     }
     profile.service = {
       host: profile.host || "service.localhost",
-      port: 3000
+      port: profile.service?.port || 3000,
+      proxyHost: profile.service?.proxyHost || profile.host,
+      proxyPort: profile.service?.port || 3000,
     }
+    this.profile = profile;
     return profile;
   }
 
@@ -125,6 +139,13 @@ export class FileStack {
       
       const profile = this.getProfile();
       
+      resource.fullName ||= `${name}-${this.name}`;
+      resource.version ||= "1";
+      if(resource.proxy == undefined) {
+        resource.proxy = true;
+      }
+
+
       // Process mixed environment block
       if (profile.environment) {
         const globalEnv: {[key: string]: string} = {};
@@ -176,16 +197,16 @@ export class FileStack {
       resource.path ||= "";
       
       resource.folder = {
-        deploy: path.join(process.cwd(),".deploy", name),
-        proyect: path.join(process.cwd(), resource.path),
-        code: path.join(process.cwd(), resource.path, resource.codeUri || "")
+        deploy: path.join(this.projectPath,".deploy", name),
+        proyect: path.join(this.projectPath, resource.path),
+        code: path.join(this.projectPath, resource.path, resource.codeUri || "")
       }
       resource.props ||= {};
       
       fs.mkdirSync(resource.folder.deploy, { recursive: true });
       resource.environment ||= {}
       resource.spec ||= {};
-      resource.updateStatus ||= async (status: string, log?: string) => {};
+      resource.updateStatus ||= async (status: string, log?: string, extraData?: object) => {};
       resource.extra ||= {};
       acc.push(resource)
       return acc;
