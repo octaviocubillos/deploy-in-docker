@@ -967,8 +967,8 @@ var require_command = __commonJS({
   "node_modules/commander/lib/command.js"(exports2) {
     var EventEmitter = require("node:events").EventEmitter;
     var childProcess = require("node:child_process");
-    var path9 = require("node:path");
-    var fs9 = require("node:fs");
+    var path7 = require("node:path");
+    var fs7 = require("node:fs");
     var process9 = require("node:process");
     var { Argument: Argument2, humanReadableArgName } = require_argument();
     var { CommanderError: CommanderError2 } = require_error();
@@ -1900,11 +1900,11 @@ Expecting one of '${allowedValues.join("', '")}'`);
         let launchWithNode = false;
         const sourceExt = [".js", ".ts", ".tsx", ".mjs", ".cjs"];
         function findFile(baseDir, baseName) {
-          const localBin = path9.resolve(baseDir, baseName);
-          if (fs9.existsSync(localBin)) return localBin;
-          if (sourceExt.includes(path9.extname(baseName))) return void 0;
+          const localBin = path7.resolve(baseDir, baseName);
+          if (fs7.existsSync(localBin)) return localBin;
+          if (sourceExt.includes(path7.extname(baseName))) return void 0;
           const foundExt = sourceExt.find(
-            (ext) => fs9.existsSync(`${localBin}${ext}`)
+            (ext) => fs7.existsSync(`${localBin}${ext}`)
           );
           if (foundExt) return `${localBin}${foundExt}`;
           return void 0;
@@ -1916,21 +1916,21 @@ Expecting one of '${allowedValues.join("', '")}'`);
         if (this._scriptPath) {
           let resolvedScriptPath;
           try {
-            resolvedScriptPath = fs9.realpathSync(this._scriptPath);
+            resolvedScriptPath = fs7.realpathSync(this._scriptPath);
           } catch (err) {
             resolvedScriptPath = this._scriptPath;
           }
-          executableDir = path9.resolve(
-            path9.dirname(resolvedScriptPath),
+          executableDir = path7.resolve(
+            path7.dirname(resolvedScriptPath),
             executableDir
           );
         }
         if (executableDir) {
           let localFile = findFile(executableDir, executableFile);
           if (!localFile && !subcommand._executableFile && this._scriptPath) {
-            const legacyName = path9.basename(
+            const legacyName = path7.basename(
               this._scriptPath,
-              path9.extname(this._scriptPath)
+              path7.extname(this._scriptPath)
             );
             if (legacyName !== this._name) {
               localFile = findFile(
@@ -1941,7 +1941,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
           }
           executableFile = localFile || executableFile;
         }
-        launchWithNode = sourceExt.includes(path9.extname(executableFile));
+        launchWithNode = sourceExt.includes(path7.extname(executableFile));
         let proc;
         if (process9.platform !== "win32") {
           if (launchWithNode) {
@@ -2781,7 +2781,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
        * @return {Command}
        */
       nameFromFilename(filename) {
-        this._name = path9.basename(filename, path9.extname(filename));
+        this._name = path7.basename(filename, path7.extname(filename));
         return this;
       }
       /**
@@ -2795,9 +2795,9 @@ Expecting one of '${allowedValues.join("', '")}'`);
        * @param {string} [path]
        * @return {(string|null|Command)}
        */
-      executableDir(path10) {
-        if (path10 === void 0) return this._executableDir;
-        this._executableDir = path10;
+      executableDir(path8) {
+        if (path8 === void 0) return this._executableDir;
+        this._executableDir = path8;
         return this;
       }
       /**
@@ -4357,11 +4357,11 @@ var require_lodash = __commonJS({
             return isFunction(object[key]);
           });
         }
-        function baseGet(object, path9) {
-          path9 = castPath(path9, object);
-          var index = 0, length = path9.length;
+        function baseGet(object, path7) {
+          path7 = castPath(path7, object);
+          var index = 0, length = path7.length;
           while (object != null && index < length) {
-            object = object[toKey(path9[index++])];
+            object = object[toKey(path7[index++])];
           }
           return index && index == length ? object : undefined2;
         }
@@ -4425,10 +4425,10 @@ var require_lodash = __commonJS({
           });
           return accumulator;
         }
-        function baseInvoke(object, path9, args) {
-          path9 = castPath(path9, object);
-          object = parent(object, path9);
-          var func = object == null ? object : object[toKey(last(path9))];
+        function baseInvoke(object, path7, args) {
+          path7 = castPath(path7, object);
+          object = parent(object, path7);
+          var func = object == null ? object : object[toKey(last(path7))];
           return func == null ? undefined2 : apply(func, object, args);
         }
         function baseIsArguments(value) {
@@ -4584,13 +4584,13 @@ var require_lodash = __commonJS({
             return object === source || baseIsMatch(object, source, matchData);
           };
         }
-        function baseMatchesProperty(path9, srcValue) {
-          if (isKey(path9) && isStrictComparable(srcValue)) {
-            return matchesStrictComparable(toKey(path9), srcValue);
+        function baseMatchesProperty(path7, srcValue) {
+          if (isKey(path7) && isStrictComparable(srcValue)) {
+            return matchesStrictComparable(toKey(path7), srcValue);
           }
           return function(object) {
-            var objValue = get(object, path9);
-            return objValue === undefined2 && objValue === srcValue ? hasIn(object, path9) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+            var objValue = get(object, path7);
+            return objValue === undefined2 && objValue === srcValue ? hasIn(object, path7) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
           };
         }
         function baseMerge(object, source, srcIndex, customizer, stack) {
@@ -4687,23 +4687,23 @@ var require_lodash = __commonJS({
           });
         }
         function basePick(object, paths) {
-          return basePickBy(object, paths, function(value, path9) {
-            return hasIn(object, path9);
+          return basePickBy(object, paths, function(value, path7) {
+            return hasIn(object, path7);
           });
         }
         function basePickBy(object, paths, predicate) {
           var index = -1, length = paths.length, result2 = {};
           while (++index < length) {
-            var path9 = paths[index], value = baseGet(object, path9);
-            if (predicate(value, path9)) {
-              baseSet(result2, castPath(path9, object), value);
+            var path7 = paths[index], value = baseGet(object, path7);
+            if (predicate(value, path7)) {
+              baseSet(result2, castPath(path7, object), value);
             }
           }
           return result2;
         }
-        function basePropertyDeep(path9) {
+        function basePropertyDeep(path7) {
           return function(object) {
-            return baseGet(object, path9);
+            return baseGet(object, path7);
           };
         }
         function basePullAll(array, values2, iteratee2, comparator) {
@@ -4777,14 +4777,14 @@ var require_lodash = __commonJS({
           var array = values(collection);
           return shuffleSelf(array, baseClamp(n, 0, array.length));
         }
-        function baseSet(object, path9, value, customizer) {
+        function baseSet(object, path7, value, customizer) {
           if (!isObject2(object)) {
             return object;
           }
-          path9 = castPath(path9, object);
-          var index = -1, length = path9.length, lastIndex = length - 1, nested = object;
+          path7 = castPath(path7, object);
+          var index = -1, length = path7.length, lastIndex = length - 1, nested = object;
           while (nested != null && ++index < length) {
-            var key = toKey(path9[index]), newValue = value;
+            var key = toKey(path7[index]), newValue = value;
             if (key === "__proto__" || key === "constructor" || key === "prototype") {
               return object;
             }
@@ -4792,7 +4792,7 @@ var require_lodash = __commonJS({
               var objValue = nested[key];
               newValue = customizer ? customizer(objValue, key, nested) : undefined2;
               if (newValue === undefined2) {
-                newValue = isObject2(objValue) ? objValue : isIndex(path9[index + 1]) ? [] : {};
+                newValue = isObject2(objValue) ? objValue : isIndex(path7[index + 1]) ? [] : {};
               }
             }
             assignValue(nested, key, newValue);
@@ -4958,13 +4958,13 @@ var require_lodash = __commonJS({
             }
           return result2;
         }
-        function baseUnset(object, path9) {
-          path9 = castPath(path9, object);
-          object = parent(object, path9);
-          return object == null || delete object[toKey(last(path9))];
+        function baseUnset(object, path7) {
+          path7 = castPath(path7, object);
+          object = parent(object, path7);
+          return object == null || delete object[toKey(last(path7))];
         }
-        function baseUpdate(object, path9, updater, customizer) {
-          return baseSet(object, path9, updater(baseGet(object, path9)), customizer);
+        function baseUpdate(object, path7, updater, customizer) {
+          return baseSet(object, path7, updater(baseGet(object, path7)), customizer);
         }
         function baseWhile(array, predicate, isDrop, fromRight) {
           var length = array.length, index = fromRight ? length : -1;
@@ -5847,11 +5847,11 @@ var require_lodash = __commonJS({
           var match = source.match(reWrapDetails);
           return match ? match[1].split(reSplitDetails) : [];
         }
-        function hasPath(object, path9, hasFunc) {
-          path9 = castPath(path9, object);
-          var index = -1, length = path9.length, result2 = false;
+        function hasPath(object, path7, hasFunc) {
+          path7 = castPath(path7, object);
+          var index = -1, length = path7.length, result2 = false;
           while (++index < length) {
-            var key = toKey(path9[index]);
+            var key = toKey(path7[index]);
             if (!(result2 = object != null && hasFunc(object, key))) {
               break;
             }
@@ -6053,8 +6053,8 @@ var require_lodash = __commonJS({
             return apply(func, this, otherArgs);
           };
         }
-        function parent(object, path9) {
-          return path9.length < 2 ? object : baseGet(object, baseSlice(path9, 0, -1));
+        function parent(object, path7) {
+          return path7.length < 2 ? object : baseGet(object, baseSlice(path7, 0, -1));
         }
         function reorder(array, indexes) {
           var arrLength = array.length, length = nativeMin(indexes.length, arrLength), oldArray = copyArray(array);
@@ -6689,10 +6689,10 @@ var require_lodash = __commonJS({
           }
           return isString(collection) ? fromIndex <= length && collection.indexOf(value, fromIndex) > -1 : !!length && baseIndexOf(collection, value, fromIndex) > -1;
         }
-        var invokeMap = baseRest(function(collection, path9, args) {
-          var index = -1, isFunc = typeof path9 == "function", result2 = isArrayLike(collection) ? Array2(collection.length) : [];
+        var invokeMap = baseRest(function(collection, path7, args) {
+          var index = -1, isFunc = typeof path7 == "function", result2 = isArrayLike(collection) ? Array2(collection.length) : [];
           baseEach(collection, function(value) {
-            result2[++index] = isFunc ? apply(path9, value, args) : baseInvoke(value, path9, args);
+            result2[++index] = isFunc ? apply(path7, value, args) : baseInvoke(value, path7, args);
           });
           return result2;
         });
@@ -7344,15 +7344,15 @@ var require_lodash = __commonJS({
         function functionsIn(object) {
           return object == null ? [] : baseFunctions(object, keysIn(object));
         }
-        function get(object, path9, defaultValue) {
-          var result2 = object == null ? undefined2 : baseGet(object, path9);
+        function get(object, path7, defaultValue) {
+          var result2 = object == null ? undefined2 : baseGet(object, path7);
           return result2 === undefined2 ? defaultValue : result2;
         }
-        function has(object, path9) {
-          return object != null && hasPath(object, path9, baseHas);
+        function has(object, path7) {
+          return object != null && hasPath(object, path7, baseHas);
         }
-        function hasIn(object, path9) {
-          return object != null && hasPath(object, path9, baseHasIn);
+        function hasIn(object, path7) {
+          return object != null && hasPath(object, path7, baseHasIn);
         }
         var invert = createInverter(function(result2, value, key) {
           if (value != null && typeof value.toString != "function") {
@@ -7405,10 +7405,10 @@ var require_lodash = __commonJS({
             return result2;
           }
           var isDeep = false;
-          paths = arrayMap(paths, function(path9) {
-            path9 = castPath(path9, object);
-            isDeep || (isDeep = path9.length > 1);
-            return path9;
+          paths = arrayMap(paths, function(path7) {
+            path7 = castPath(path7, object);
+            isDeep || (isDeep = path7.length > 1);
+            return path7;
           });
           copyObject(object, getAllKeysIn(object), result2);
           if (isDeep) {
@@ -7434,19 +7434,19 @@ var require_lodash = __commonJS({
             return [prop];
           });
           predicate = getIteratee(predicate);
-          return basePickBy(object, props, function(value, path9) {
-            return predicate(value, path9[0]);
+          return basePickBy(object, props, function(value, path7) {
+            return predicate(value, path7[0]);
           });
         }
-        function result(object, path9, defaultValue) {
-          path9 = castPath(path9, object);
-          var index = -1, length = path9.length;
+        function result(object, path7, defaultValue) {
+          path7 = castPath(path7, object);
+          var index = -1, length = path7.length;
           if (!length) {
             length = 1;
             object = undefined2;
           }
           while (++index < length) {
-            var value = object == null ? undefined2 : object[toKey(path9[index])];
+            var value = object == null ? undefined2 : object[toKey(path7[index])];
             if (value === undefined2) {
               index = length;
               value = defaultValue;
@@ -7455,12 +7455,12 @@ var require_lodash = __commonJS({
           }
           return object;
         }
-        function set2(object, path9, value) {
-          return object == null ? object : baseSet(object, path9, value);
+        function set2(object, path7, value) {
+          return object == null ? object : baseSet(object, path7, value);
         }
-        function setWith(object, path9, value, customizer) {
+        function setWith(object, path7, value, customizer) {
           customizer = typeof customizer == "function" ? customizer : undefined2;
-          return object == null ? object : baseSet(object, path9, value, customizer);
+          return object == null ? object : baseSet(object, path7, value, customizer);
         }
         var toPairs = createToPairs(keys);
         var toPairsIn = createToPairs(keysIn);
@@ -7482,15 +7482,15 @@ var require_lodash = __commonJS({
           });
           return accumulator;
         }
-        function unset(object, path9) {
-          return object == null ? true : baseUnset(object, path9);
+        function unset(object, path7) {
+          return object == null ? true : baseUnset(object, path7);
         }
-        function update(object, path9, updater) {
-          return object == null ? object : baseUpdate(object, path9, castFunction(updater));
+        function update(object, path7, updater) {
+          return object == null ? object : baseUpdate(object, path7, castFunction(updater));
         }
-        function updateWith(object, path9, updater, customizer) {
+        function updateWith(object, path7, updater, customizer) {
           customizer = typeof customizer == "function" ? customizer : undefined2;
-          return object == null ? object : baseUpdate(object, path9, castFunction(updater), customizer);
+          return object == null ? object : baseUpdate(object, path7, castFunction(updater), customizer);
         }
         function values(object) {
           return object == null ? [] : baseValues(object, keys(object));
@@ -7871,17 +7871,17 @@ var require_lodash = __commonJS({
         function matches(source) {
           return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
         }
-        function matchesProperty(path9, srcValue) {
-          return baseMatchesProperty(path9, baseClone(srcValue, CLONE_DEEP_FLAG));
+        function matchesProperty(path7, srcValue) {
+          return baseMatchesProperty(path7, baseClone(srcValue, CLONE_DEEP_FLAG));
         }
-        var method = baseRest(function(path9, args) {
+        var method = baseRest(function(path7, args) {
           return function(object) {
-            return baseInvoke(object, path9, args);
+            return baseInvoke(object, path7, args);
           };
         });
         var methodOf = baseRest(function(object, args) {
-          return function(path9) {
-            return baseInvoke(object, path9, args);
+          return function(path7) {
+            return baseInvoke(object, path7, args);
           };
         });
         function mixin(object, source, options) {
@@ -7928,12 +7928,12 @@ var require_lodash = __commonJS({
         var over = createOver(arrayMap);
         var overEvery = createOver(arrayEvery);
         var overSome = createOver(arraySome);
-        function property(path9) {
-          return isKey(path9) ? baseProperty(toKey(path9)) : basePropertyDeep(path9);
+        function property(path7) {
+          return isKey(path7) ? baseProperty(toKey(path7)) : basePropertyDeep(path7);
         }
         function propertyOf(object) {
-          return function(path9) {
-            return object == null ? undefined2 : baseGet(object, path9);
+          return function(path7) {
+            return object == null ? undefined2 : baseGet(object, path7);
           };
         }
         var range = createRange();
@@ -8386,12 +8386,12 @@ var require_lodash = __commonJS({
         LazyWrapper.prototype.findLast = function(predicate) {
           return this.reverse().find(predicate);
         };
-        LazyWrapper.prototype.invokeMap = baseRest(function(path9, args) {
-          if (typeof path9 == "function") {
+        LazyWrapper.prototype.invokeMap = baseRest(function(path7, args) {
+          if (typeof path7 == "function") {
             return new LazyWrapper(this);
           }
           return this.map(function(value) {
-            return baseInvoke(value, path9, args);
+            return baseInvoke(value, path7, args);
           });
         });
         LazyWrapper.prototype.reject = function(predicate) {
@@ -9377,15 +9377,15 @@ var require_route = __commonJS({
       };
     }
     function wrapConversion(toModel, graph) {
-      const path9 = [graph[toModel].parent, toModel];
+      const path7 = [graph[toModel].parent, toModel];
       let fn = conversions[graph[toModel].parent][toModel];
       let cur = graph[toModel].parent;
       while (graph[cur].parent) {
-        path9.unshift(graph[cur].parent);
+        path7.unshift(graph[cur].parent);
         fn = link(conversions[graph[cur].parent][cur], fn);
         cur = graph[cur].parent;
       }
-      fn.conversion = path9;
+      fn.conversion = path7;
       return fn;
     }
     module2.exports = function(fromModel) {
@@ -18203,11 +18203,11 @@ var require_agent = __commonJS({
       };
     })();
     var WINDOWS_PIPE_REGEX = /^[/\\][/\\]\.[/\\]pipe[/\\].+/;
-    function createAgent(path9) {
-      if (process.platform === "win32" && !WINDOWS_PIPE_REGEX.test(path9)) {
-        return path9 === "pageant" ? new PageantAgent() : new CygwinAgent(path9);
+    function createAgent(path7) {
+      if (process.platform === "win32" && !WINDOWS_PIPE_REGEX.test(path7)) {
+        return path7 === "pageant" ? new PageantAgent() : new CygwinAgent(path7);
       }
-      return new OpenSSHAgent(path9);
+      return new OpenSSHAgent(path7);
     }
     var AgentProtocol = (() => {
       const SSH_AGENTC_REQUEST_IDENTITIES = 11;
@@ -23182,8 +23182,8 @@ var require_SFTP = __commonJS({
   "node_modules/ssh2/lib/protocol/SFTP.js"(exports2, module2) {
     "use strict";
     var EventEmitter = require("events");
-    var fs9 = require("fs");
-    var { constants } = fs9;
+    var fs7 = require("fs");
+    var { constants } = fs7;
     var {
       Readable: ReadableStream,
       Writable: WritableStream
@@ -23451,17 +23451,17 @@ var require_SFTP = __commonJS({
       // ===========================================================================
       // Client-specific ===========================================================
       // ===========================================================================
-      createReadStream(path9, options) {
+      createReadStream(path7, options) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        return new ReadStream(this, path9, options);
+        return new ReadStream(this, path7, options);
       }
-      createWriteStream(path9, options) {
+      createWriteStream(path7, options) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        return new WriteStream(this, path9, options);
+        return new WriteStream(this, path7, options);
       }
-      open(path9, flags_, attrs, cb) {
+      open(path7, flags_, attrs, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         if (typeof attrs === "function") {
@@ -23480,7 +23480,7 @@ var require_SFTP = __commonJS({
           attrsFlags = attrs.flags;
           attrsLen = attrs.nb;
         }
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen + 4 + 4 + attrsLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -23488,7 +23488,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         writeUInt32BE(buf, flags, p += pathLen);
         writeUInt32BE(buf, attrsFlags, p += 4);
         if (attrsLen) {
@@ -23612,14 +23612,14 @@ var require_SFTP = __commonJS({
       fastGet(remotePath, localPath, opts, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        fastXfer(this, fs9, remotePath, localPath, opts, cb);
+        fastXfer(this, fs7, remotePath, localPath, opts, cb);
       }
       fastPut(localPath, remotePath, opts, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        fastXfer(fs9, this, localPath, remotePath, opts, cb);
+        fastXfer(fs7, this, localPath, remotePath, opts, cb);
       }
-      readFile(path9, options, callback_) {
+      readFile(path7, options, callback_) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         let callback;
@@ -23692,13 +23692,13 @@ var require_SFTP = __commonJS({
             return callback && callback(er, buffer);
           });
         };
-        this.open(path9, flag, 438, (er, handle_) => {
+        this.open(path7, flag, 438, (er, handle_) => {
           if (er)
             return callback && callback(er);
           handle = handle_;
           const tryStat = (er2, st) => {
             if (er2) {
-              this.stat(path9, (er_, st_) => {
+              this.stat(path7, (er_, st_) => {
                 if (er_) {
                   return this.close(handle, () => {
                     callback && callback(er2);
@@ -23719,7 +23719,7 @@ var require_SFTP = __commonJS({
           this.fstat(handle, tryStat);
         });
       }
-      writeFile(path9, data, options, callback_) {
+      writeFile(path7, data, options, callback_) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         let callback;
@@ -23738,7 +23738,7 @@ var require_SFTP = __commonJS({
         if (options.encoding && !Buffer.isEncoding(options.encoding))
           throw new Error(`Unknown encoding: ${options.encoding}`);
         const flag = options.flag || "w";
-        this.open(path9, flag, options.mode, (openErr, handle) => {
+        this.open(path7, flag, options.mode, (openErr, handle) => {
           if (openErr) {
             callback && callback(openErr);
           } else {
@@ -23747,7 +23747,7 @@ var require_SFTP = __commonJS({
             if (position === null) {
               const tryStat = (er, st) => {
                 if (er) {
-                  this.stat(path9, (er_, st_) => {
+                  this.stat(path7, (er_, st_) => {
                     if (er_) {
                       return this.close(handle, () => {
                         callback && callback(er);
@@ -23766,7 +23766,7 @@ var require_SFTP = __commonJS({
           }
         });
       }
-      appendFile(path9, data, options, callback_) {
+      appendFile(path7, data, options, callback_) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         let callback;
@@ -23784,12 +23784,12 @@ var require_SFTP = __commonJS({
           throw new TypeError("Bad arguments");
         if (!options.flag)
           options = Object.assign({ flag: "a" }, options);
-        this.writeFile(path9, data, options, callback);
+        this.writeFile(path7, data, options, callback);
       }
-      exists(path9, cb) {
+      exists(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        this.stat(path9, (err) => {
+        this.stat(path7, (err) => {
           cb && cb(err ? false : true);
         });
       }
@@ -23832,7 +23832,7 @@ var require_SFTP = __commonJS({
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} RENAME`
         );
       }
-      mkdir(path9, attrs, cb) {
+      mkdir(path7, attrs, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         let flags = 0;
@@ -23846,7 +23846,7 @@ var require_SFTP = __commonJS({
           flags = attrs.flags;
           attrsLen = attrs.nb;
         }
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen + 4 + attrsLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -23854,7 +23854,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         writeUInt32BE(buf, flags, p += pathLen);
         if (attrsLen) {
           p += 4;
@@ -23870,10 +23870,10 @@ var require_SFTP = __commonJS({
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} MKDIR`
         );
       }
-      rmdir(path9, cb) {
+      rmdir(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -23881,7 +23881,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = { cb };
         const isBuffered = sendOrBuffer(this, buf);
         this._debug && this._debug(
@@ -23971,10 +23971,10 @@ var require_SFTP = __commonJS({
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} FSTAT`
         );
       }
-      stat(path9, cb) {
+      stat(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -23982,17 +23982,17 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = { cb };
         const isBuffered = sendOrBuffer(this, buf);
         this._debug && this._debug(
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} STAT`
         );
       }
-      lstat(path9, cb) {
+      lstat(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24000,17 +24000,17 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = { cb };
         const isBuffered = sendOrBuffer(this, buf);
         this._debug && this._debug(
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} LSTAT`
         );
       }
-      opendir(path9, cb) {
+      opendir(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24018,14 +24018,14 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = { cb };
         const isBuffered = sendOrBuffer(this, buf);
         this._debug && this._debug(
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} OPENDIR`
         );
       }
-      setstat(path9, attrs, cb) {
+      setstat(path7, attrs, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         let flags = 0;
@@ -24037,7 +24037,7 @@ var require_SFTP = __commonJS({
         } else if (typeof attrs === "function") {
           cb = attrs;
         }
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen + 4 + attrsLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24045,7 +24045,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         writeUInt32BE(buf, flags, p += pathLen);
         if (attrsLen) {
           p += 4;
@@ -24105,8 +24105,8 @@ var require_SFTP = __commonJS({
           mtime: toUnixTimestamp(mtime)
         }, cb);
       }
-      utimes(path9, atime, mtime, cb) {
-        return this.setstat(path9, {
+      utimes(path7, atime, mtime, cb) {
+        return this.setstat(path7, {
           atime: toUnixTimestamp(atime),
           mtime: toUnixTimestamp(mtime)
         }, cb);
@@ -24117,8 +24117,8 @@ var require_SFTP = __commonJS({
           gid
         }, cb);
       }
-      chown(path9, uid, gid, cb) {
-        return this.setstat(path9, {
+      chown(path7, uid, gid, cb) {
+        return this.setstat(path7, {
           uid,
           gid
         }, cb);
@@ -24128,15 +24128,15 @@ var require_SFTP = __commonJS({
           mode
         }, cb);
       }
-      chmod(path9, mode, cb) {
-        return this.setstat(path9, {
+      chmod(path7, mode, cb) {
+        return this.setstat(path7, {
           mode
         }, cb);
       }
-      readlink(path9, cb) {
+      readlink(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24144,7 +24144,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = {
           cb: (err, names) => {
             if (typeof cb !== "function")
@@ -24189,10 +24189,10 @@ var require_SFTP = __commonJS({
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} SYMLINK`
         );
       }
-      realpath(path9, cb) {
+      realpath(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24200,7 +24200,7 @@ var require_SFTP = __commonJS({
         const reqid = this._writeReqid = this._writeReqid + 1 & MAX_REQID;
         writeUInt32BE(buf, reqid, 5);
         writeUInt32BE(buf, pathLen, p);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = {
           cb: (err, names) => {
             if (typeof cb !== "function")
@@ -24245,13 +24245,13 @@ var require_SFTP = __commonJS({
           this._debug(`SFTP: Outbound: ${which} posix-rename@openssh.com`);
         }
       }
-      ext_openssh_statvfs(path9, cb) {
+      ext_openssh_statvfs(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         const ext = this._extensions["statvfs@openssh.com"];
         if (!ext || ext !== "2")
           throw new Error("Server does not support this extended request");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + 19 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24261,7 +24261,7 @@ var require_SFTP = __commonJS({
         writeUInt32BE(buf, 19, p);
         buf.utf8Write("statvfs@openssh.com", p += 4, 19);
         writeUInt32BE(buf, pathLen, p += 19);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = { extended: "statvfs@openssh.com", cb };
         const isBuffered = sendOrBuffer(this, buf);
         if (this._debug) {
@@ -24347,7 +24347,7 @@ var require_SFTP = __commonJS({
           `SFTP: Outbound: ${isBuffered ? "Buffered" : "Sending"} fsync@openssh.com`
         );
       }
-      ext_openssh_lsetstat(path9, attrs, cb) {
+      ext_openssh_lsetstat(path7, attrs, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         const ext = this._extensions["lsetstat@openssh.com"];
@@ -24362,7 +24362,7 @@ var require_SFTP = __commonJS({
         } else if (typeof attrs === "function") {
           cb = attrs;
         }
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + 20 + 4 + pathLen + 4 + attrsLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24372,7 +24372,7 @@ var require_SFTP = __commonJS({
         writeUInt32BE(buf, 20, p);
         buf.utf8Write("lsetstat@openssh.com", p += 4, 20);
         writeUInt32BE(buf, pathLen, p += 20);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         writeUInt32BE(buf, flags, p += pathLen);
         if (attrsLen) {
           p += 4;
@@ -24389,13 +24389,13 @@ var require_SFTP = __commonJS({
           this._debug(`SFTP: Outbound: ${status} lsetstat@openssh.com`);
         }
       }
-      ext_openssh_expandPath(path9, cb) {
+      ext_openssh_expandPath(path7, cb) {
         if (this.server)
           throw new Error("Client-only method called in server mode");
         const ext = this._extensions["expand-path@openssh.com"];
         if (ext !== "1")
           throw new Error("Server does not support this extended request");
-        const pathLen = Buffer.byteLength(path9);
+        const pathLen = Buffer.byteLength(path7);
         let p = 9;
         const buf = Buffer.allocUnsafe(4 + 1 + 4 + 4 + 23 + 4 + pathLen);
         writeUInt32BE(buf, buf.length - 4, 0);
@@ -24405,7 +24405,7 @@ var require_SFTP = __commonJS({
         writeUInt32BE(buf, 23, p);
         buf.utf8Write("expand-path@openssh.com", p += 4, 23);
         writeUInt32BE(buf, pathLen, p += 20);
-        buf.utf8Write(path9, p += 4, pathLen);
+        buf.utf8Write(path7, p += 4, pathLen);
         this._requests[reqid] = {
           cb: (err, names) => {
             if (typeof cb !== "function")
@@ -24878,13 +24878,13 @@ var require_SFTP = __commonJS({
             if (--left === 0)
               cb(err);
           };
-          if (srcHandle && (src === fs9 || src.outgoing.state === "open"))
+          if (srcHandle && (src === fs7 || src.outgoing.state === "open"))
             ++left;
-          if (dstHandle && (dst === fs9 || dst.outgoing.state === "open"))
+          if (dstHandle && (dst === fs7 || dst.outgoing.state === "open"))
             ++left;
-          if (srcHandle && (src === fs9 || src.outgoing.state === "open"))
+          if (srcHandle && (src === fs7 || src.outgoing.state === "open"))
             src.close(srcHandle, cbfinal);
-          if (dstHandle && (dst === fs9 || dst.outgoing.state === "open"))
+          if (dstHandle && (dst === fs7 || dst.outgoing.state === "open"))
             dst.close(dstHandle, cbfinal);
         } else {
           cb(err);
@@ -24900,7 +24900,7 @@ var require_SFTP = __commonJS({
           tryStat(null, { size: fileSize });
         function tryStat(err2, attrs) {
           if (err2) {
-            if (src !== fs9) {
+            if (src !== fs7) {
               src.stat(srcPath, (err_, attrs_) => {
                 if (err_)
                   return onerror(err2);
@@ -25683,12 +25683,12 @@ var require_SFTP = __commonJS({
       [REQUEST.LSTAT]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed LSTAT packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received LSTAT (id:${reqID})`);
-        if (!sftp.emit("LSTAT", reqID, path9)) {
+        if (!sftp.emit("LSTAT", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
@@ -25707,13 +25707,13 @@ var require_SFTP = __commonJS({
       [REQUEST.SETSTAT]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         const attrs = readAttrs(sftp._biOpt);
         bufferParser.clear();
         if (attrs === void 0)
           return doFatalSFTPError(sftp, "Malformed SETSTAT packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received SETSTAT (id:${reqID})`);
-        if (!sftp.emit("SETSTAT", reqID, path9, attrs)) {
+        if (!sftp.emit("SETSTAT", reqID, path7, attrs)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
@@ -25735,12 +25735,12 @@ var require_SFTP = __commonJS({
       [REQUEST.OPENDIR]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed OPENDIR packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received OPENDIR (id:${reqID})`);
-        if (!sftp.emit("OPENDIR", reqID, path9)) {
+        if (!sftp.emit("OPENDIR", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
@@ -25759,63 +25759,63 @@ var require_SFTP = __commonJS({
       [REQUEST.REMOVE]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed REMOVE packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received REMOVE (id:${reqID})`);
-        if (!sftp.emit("REMOVE", reqID, path9)) {
+        if (!sftp.emit("REMOVE", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
       [REQUEST.MKDIR]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         const attrs = readAttrs(sftp._biOpt);
         bufferParser.clear();
         if (attrs === void 0)
           return doFatalSFTPError(sftp, "Malformed MKDIR packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received MKDIR (id:${reqID})`);
-        if (!sftp.emit("MKDIR", reqID, path9, attrs)) {
+        if (!sftp.emit("MKDIR", reqID, path7, attrs)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
       [REQUEST.RMDIR]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed RMDIR packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received RMDIR (id:${reqID})`);
-        if (!sftp.emit("RMDIR", reqID, path9)) {
+        if (!sftp.emit("RMDIR", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
       [REQUEST.REALPATH]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed REALPATH packet");
         sftp._debug && sftp._debug(
           `SFTP: Inbound: Received REALPATH (id:${reqID})`
         );
-        if (!sftp.emit("REALPATH", reqID, path9)) {
+        if (!sftp.emit("REALPATH", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
       [REQUEST.STAT]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed STAT packet");
         sftp._debug && sftp._debug(`SFTP: Inbound: Received STAT (id:${reqID})`);
-        if (!sftp.emit("STAT", reqID, path9)) {
+        if (!sftp.emit("STAT", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
@@ -25835,14 +25835,14 @@ var require_SFTP = __commonJS({
       [REQUEST.READLINK]: (sftp, payload) => {
         bufferParser.init(payload, 1);
         const reqID = bufferParser.readUInt32BE();
-        const path9 = bufferParser.readString(true);
+        const path7 = bufferParser.readString(true);
         bufferParser.clear();
-        if (path9 === void 0)
+        if (path7 === void 0)
           return doFatalSFTPError(sftp, "Malformed READLINK packet");
         sftp._debug && sftp._debug(
           `SFTP: Inbound: Received READLINK (id:${reqID})`
         );
-        if (!sftp.emit("READLINK", reqID, path9)) {
+        if (!sftp.emit("READLINK", reqID, path7)) {
           sftp.status(reqID, STATUS_CODE.OP_UNSUPPORTED);
         }
       },
@@ -25913,7 +25913,7 @@ var require_SFTP = __commonJS({
     function roundUpToMultipleOf8(n) {
       return n + 7 & ~7;
     }
-    function ReadStream(sftp, path9, options) {
+    function ReadStream(sftp, path7, options) {
       if (options === void 0)
         options = {};
       else if (typeof options === "string")
@@ -25927,7 +25927,7 @@ var require_SFTP = __commonJS({
       options.emitClose = false;
       options.autoDestroy = false;
       ReadableStream.call(this, options);
-      this.path = path9;
+      this.path = path7;
       this.flags = options.flags === void 0 ? "r" : options.flags;
       this.mode = options.mode === void 0 ? 438 : options.mode;
       this.start = options.start;
@@ -26058,7 +26058,7 @@ var require_SFTP = __commonJS({
       },
       configurable: true
     });
-    function WriteStream(sftp, path9, options) {
+    function WriteStream(sftp, path7, options) {
       if (options === void 0)
         options = {};
       else if (typeof options === "string")
@@ -26070,7 +26070,7 @@ var require_SFTP = __commonJS({
       options.emitClose = false;
       options.autoDestroy = false;
       WritableStream.call(this, options);
-      this.path = path9;
+      this.path = path7;
       this.flags = options.flags === void 0 ? "w" : options.flags;
       this.mode = options.mode === void 0 ? 438 : options.mode;
       this.start = options.start;
@@ -33746,12 +33746,12 @@ var require_src = __commonJS({
 // node_modules/split-ca/index.js
 var require_split_ca = __commonJS({
   "node_modules/split-ca/index.js"(exports2, module2) {
-    var fs9 = require("fs");
+    var fs7 = require("fs");
     module2.exports = function(filepath, split, encoding) {
       split = typeof split !== "undefined" ? split : "\n";
       encoding = typeof encoding !== "undefined" ? encoding : "utf8";
       var ca = [];
-      var chain = fs9.readFileSync(filepath, encoding);
+      var chain = fs7.readFileSync(filepath, encoding);
       if (chain.indexOf("-END CERTIFICATE-") < 0 || chain.indexOf("-BEGIN CERTIFICATE-") < 0) {
         throw Error("File does not contain 'BEGIN CERTIFICATE' or 'END CERTIFICATE'");
       }
@@ -33779,8 +33779,8 @@ var require_modem = __commonJS({
   "node_modules/docker-modem/lib/modem.js"(exports2, module2) {
     var querystring = require("querystring");
     var http = require_http();
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var url = require("url");
     var ssh = require_ssh();
     var HttpDuplex = require_http_duplex();
@@ -33829,9 +33829,9 @@ var require_modem = __commonJS({
         }
         opts.host = host.hostname;
         if (process.env.DOCKER_CERT_PATH) {
-          opts.ca = splitca(path9.join(process.env.DOCKER_CERT_PATH, "ca.pem"));
-          opts.cert = fs9.readFileSync(path9.join(process.env.DOCKER_CERT_PATH, "cert.pem"));
-          opts.key = fs9.readFileSync(path9.join(process.env.DOCKER_CERT_PATH, "key.pem"));
+          opts.ca = splitca(path7.join(process.env.DOCKER_CERT_PATH, "ca.pem"));
+          opts.cert = fs7.readFileSync(path7.join(process.env.DOCKER_CERT_PATH, "cert.pem"));
+          opts.key = fs7.readFileSync(path7.join(process.env.DOCKER_CERT_PATH, "key.pem"));
         }
         if (process.env.DOCKER_CLIENT_TIMEOUT) {
           opts.timeout = parseInt(process.env.DOCKER_CLIENT_TIMEOUT, 10);
@@ -33841,8 +33841,8 @@ var require_modem = __commonJS({
     };
     var findDefaultUnixSocket = function() {
       return new Promise(function(resolve) {
-        var userDockerSocket = path9.join(os3.homedir(), ".docker", "run", "docker.sock");
-        fs9.access(userDockerSocket, function(err) {
+        var userDockerSocket = path7.join(os3.homedir(), ".docker", "run", "docker.sock");
+        fs7.access(userDockerSocket, function(err) {
           if (err) resolve("/var/run/docker.sock");
           else resolve(userDockerSocket);
         });
@@ -33935,7 +33935,7 @@ var require_modem = __commonJS({
       }
       if (options.file) {
         if (typeof options.file === "string") {
-          data = fs9.createReadStream(path9.resolve(options.file));
+          data = fs7.createReadStream(path7.resolve(options.file));
         } else {
           data = options.file;
         }
@@ -34232,7 +34232,7 @@ var require_modem = __commonJS({
 var require_ignore = __commonJS({
   "node_modules/@balena/dockerignore/ignore.js"(exports2, module2) {
     "use strict";
-    var path9 = require("path");
+    var path7 = require("path");
     var factory = (options) => new IgnoreBase(options);
     factory.default = factory;
     module2.exports = factory;
@@ -34241,22 +34241,22 @@ var require_ignore = __commonJS({
     }
     var REGEX_TRAILING_SLASH = /(?<=.)\/$/;
     var REGEX_TRAILING_BACKSLASH = /(?<=.)\\$/;
-    var REGEX_TRAILING_PATH_SEP = path9.sep === "\\" ? REGEX_TRAILING_BACKSLASH : REGEX_TRAILING_SLASH;
+    var REGEX_TRAILING_PATH_SEP = path7.sep === "\\" ? REGEX_TRAILING_BACKSLASH : REGEX_TRAILING_SLASH;
     var KEY_IGNORE = typeof Symbol !== "undefined" ? Symbol.for("dockerignore") : "dockerignore";
     function cleanPath(file) {
-      return path9.normalize(file).replace(REGEX_TRAILING_PATH_SEP, "");
+      return path7.normalize(file).replace(REGEX_TRAILING_PATH_SEP, "");
     }
     function toSlash(file) {
-      if (path9.sep === "/") {
+      if (path7.sep === "/") {
         return file;
       }
       return file.replace(/\\/g, "/");
     }
     function fromSlash(file) {
-      if (path9.sep === "/") {
+      if (path7.sep === "/") {
         return file;
       }
-      return file.replace(/\//g, path9.sep);
+      return file.replace(/\//g, path7.sep);
     }
     var IgnoreBase = class {
       constructor({
@@ -34305,13 +34305,13 @@ var require_ignore = __commonJS({
         return pattern && typeof pattern === "string" && pattern.indexOf("#") !== 0 && pattern.trim() !== "";
       }
       filter(paths) {
-        return make_array(paths).filter((path10) => this._filter(path10));
+        return make_array(paths).filter((path8) => this._filter(path8));
       }
       createFilter() {
-        return (path10) => this._filter(path10);
+        return (path8) => this._filter(path8);
       }
-      ignores(path10) {
-        return !this._filter(path10);
+      ignores(path8) {
+        return !this._filter(path8);
       }
       // https://github.com/moby/moby/blob/v19.03.8/builder/dockerignore/dockerignore.go#L41-L53
       // https://github.com/moby/moby/blob/v19.03.8/pkg/fileutils/fileutils.go#L29-L55
@@ -34350,36 +34350,36 @@ var require_ignore = __commonJS({
           origin,
           pattern,
           // https://github.com/moby/moby/blob/v19.03.8/pkg/fileutils/fileutils.go#L54
-          dirs: pattern.split(path9.sep),
+          dirs: pattern.split(path7.sep),
           negative
         };
       }
       // @returns `Boolean` true if the `path` is NOT ignored
-      _filter(path10) {
-        if (!path10) {
+      _filter(path8) {
+        if (!path8) {
           return false;
         }
-        if (path10 in this._cache) {
-          return this._cache[path10];
+        if (path8 in this._cache) {
+          return this._cache[path8];
         }
-        return this._cache[path10] = this._test(path10);
+        return this._cache[path8] = this._test(path8);
       }
       // @returns {Boolean} true if a file is NOT ignored
       // https://github.com/moby/moby/blob/v19.03.8/pkg/fileutils/fileutils.go#L62
       _test(file) {
         file = fromSlash(file);
-        const parentPath = cleanPath(path9.dirname(file));
-        const parentPathDirs = parentPath.split(path9.sep);
+        const parentPath = cleanPath(path7.dirname(file));
+        const parentPathDirs = parentPath.split(path7.sep);
         let matched = false;
         this._rules.forEach((rule) => {
           let match = this._match(file, rule);
           if (!match && parentPath !== ".") {
             if (rule.dirs.includes("**")) {
               for (let i = rule.dirs.filter((x) => x !== "**").length; i <= parentPathDirs.length; i++) {
-                match = match || this._match(parentPathDirs.slice(0, i).join(path9.sep), rule);
+                match = match || this._match(parentPathDirs.slice(0, i).join(path7.sep), rule);
               }
             } else if (rule.dirs.length <= parentPathDirs.length) {
-              match = this._match(parentPathDirs.slice(0, rule.dirs.length).join(path9.sep), rule);
+              match = this._match(parentPathDirs.slice(0, rule.dirs.length).join(path7.sep), rule);
             }
           }
           if (match) {
@@ -34398,13 +34398,13 @@ var require_ignore = __commonJS({
           return rule;
         }
         let regStr = "^";
-        let escapedSlash = path9.sep === "\\" ? "\\\\" : path9.sep;
+        let escapedSlash = path7.sep === "\\" ? "\\\\" : path7.sep;
         for (let i = 0; i < rule.pattern.length; i++) {
           const ch = rule.pattern[i];
           if (ch === "*") {
             if (rule.pattern[i + 1] === "*") {
               i++;
-              if (rule.pattern[i + 1] === path9.sep) {
+              if (rule.pattern[i + 1] === path7.sep) {
                 i++;
               }
               if (rule.pattern[i + 1] === void 0) {
@@ -34420,7 +34420,7 @@ var require_ignore = __commonJS({
           } else if (ch === "." || ch === "$") {
             regStr += `\\${ch}`;
           } else if (ch === "\\") {
-            if (path9.sep === "\\") {
+            if (path7.sep === "\\") {
               regStr += escapedSlash;
               continue;
             }
@@ -34446,69 +34446,69 @@ var require_ignore = __commonJS({
 var require_chownr = __commonJS({
   "node_modules/chownr/chownr.js"(exports2, module2) {
     "use strict";
-    var fs9 = require("fs");
-    var path9 = require("path");
-    var LCHOWN = fs9.lchown ? "lchown" : "chown";
-    var LCHOWNSYNC = fs9.lchownSync ? "lchownSync" : "chownSync";
-    var needEISDIRHandled = fs9.lchown && !process.version.match(/v1[1-9]+\./) && !process.version.match(/v10\.[6-9]/);
-    var lchownSync = (path10, uid, gid) => {
+    var fs7 = require("fs");
+    var path7 = require("path");
+    var LCHOWN = fs7.lchown ? "lchown" : "chown";
+    var LCHOWNSYNC = fs7.lchownSync ? "lchownSync" : "chownSync";
+    var needEISDIRHandled = fs7.lchown && !process.version.match(/v1[1-9]+\./) && !process.version.match(/v10\.[6-9]/);
+    var lchownSync = (path8, uid, gid) => {
       try {
-        return fs9[LCHOWNSYNC](path10, uid, gid);
+        return fs7[LCHOWNSYNC](path8, uid, gid);
       } catch (er) {
         if (er.code !== "ENOENT")
           throw er;
       }
     };
-    var chownSync = (path10, uid, gid) => {
+    var chownSync = (path8, uid, gid) => {
       try {
-        return fs9.chownSync(path10, uid, gid);
+        return fs7.chownSync(path8, uid, gid);
       } catch (er) {
         if (er.code !== "ENOENT")
           throw er;
       }
     };
-    var handleEISDIR = needEISDIRHandled ? (path10, uid, gid, cb) => (er) => {
+    var handleEISDIR = needEISDIRHandled ? (path8, uid, gid, cb) => (er) => {
       if (!er || er.code !== "EISDIR")
         cb(er);
       else
-        fs9.chown(path10, uid, gid, cb);
+        fs7.chown(path8, uid, gid, cb);
     } : (_2, __, ___, cb) => cb;
-    var handleEISDirSync = needEISDIRHandled ? (path10, uid, gid) => {
+    var handleEISDirSync = needEISDIRHandled ? (path8, uid, gid) => {
       try {
-        return lchownSync(path10, uid, gid);
+        return lchownSync(path8, uid, gid);
       } catch (er) {
         if (er.code !== "EISDIR")
           throw er;
-        chownSync(path10, uid, gid);
+        chownSync(path8, uid, gid);
       }
-    } : (path10, uid, gid) => lchownSync(path10, uid, gid);
+    } : (path8, uid, gid) => lchownSync(path8, uid, gid);
     var nodeVersion = process.version;
-    var readdir = (path10, options, cb) => fs9.readdir(path10, options, cb);
-    var readdirSync = (path10, options) => fs9.readdirSync(path10, options);
+    var readdir = (path8, options, cb) => fs7.readdir(path8, options, cb);
+    var readdirSync = (path8, options) => fs7.readdirSync(path8, options);
     if (/^v4\./.test(nodeVersion))
-      readdir = (path10, options, cb) => fs9.readdir(path10, cb);
+      readdir = (path8, options, cb) => fs7.readdir(path8, cb);
     var chown = (cpath, uid, gid, cb) => {
-      fs9[LCHOWN](cpath, uid, gid, handleEISDIR(cpath, uid, gid, (er) => {
+      fs7[LCHOWN](cpath, uid, gid, handleEISDIR(cpath, uid, gid, (er) => {
         cb(er && er.code !== "ENOENT" ? er : null);
       }));
     };
     var chownrKid = (p, child, uid, gid, cb) => {
       if (typeof child === "string")
-        return fs9.lstat(path9.resolve(p, child), (er, stats) => {
+        return fs7.lstat(path7.resolve(p, child), (er, stats) => {
           if (er)
             return cb(er.code !== "ENOENT" ? er : null);
           stats.name = child;
           chownrKid(p, stats, uid, gid, cb);
         });
       if (child.isDirectory()) {
-        chownr(path9.resolve(p, child.name), uid, gid, (er) => {
+        chownr(path7.resolve(p, child.name), uid, gid, (er) => {
           if (er)
             return cb(er);
-          const cpath = path9.resolve(p, child.name);
+          const cpath = path7.resolve(p, child.name);
           chown(cpath, uid, gid, cb);
         });
       } else {
-        const cpath = path9.resolve(p, child.name);
+        const cpath = path7.resolve(p, child.name);
         chown(cpath, uid, gid, cb);
       }
     };
@@ -34538,7 +34538,7 @@ var require_chownr = __commonJS({
     var chownrKidSync = (p, child, uid, gid) => {
       if (typeof child === "string") {
         try {
-          const stats = fs9.lstatSync(path9.resolve(p, child));
+          const stats = fs7.lstatSync(path7.resolve(p, child));
           stats.name = child;
           child = stats;
         } catch (er) {
@@ -34549,8 +34549,8 @@ var require_chownr = __commonJS({
         }
       }
       if (child.isDirectory())
-        chownrSync(path9.resolve(p, child.name), uid, gid);
-      handleEISDirSync(path9.resolve(p, child.name), uid, gid);
+        chownrSync(path7.resolve(p, child.name), uid, gid);
+      handleEISDirSync(path7.resolve(p, child.name), uid, gid);
     };
     var chownrSync = (p, uid, gid) => {
       let children;
@@ -35793,9 +35793,9 @@ var require_pump = __commonJS({
   "node_modules/pump/index.js"(exports2, module2) {
     var once = require_once();
     var eos = require_end_of_stream2();
-    var fs9;
+    var fs7;
     try {
-      fs9 = require("fs");
+      fs7 = require("fs");
     } catch (e) {
     }
     var noop = function() {
@@ -35806,8 +35806,8 @@ var require_pump = __commonJS({
     };
     var isFS = function(stream) {
       if (!ancient) return false;
-      if (!fs9) return false;
-      return (stream instanceof (fs9.ReadStream || noop) || stream instanceof (fs9.WriteStream || noop)) && isFn(stream.close);
+      if (!fs7) return false;
+      return (stream instanceof (fs7.ReadStream || noop) || stream instanceof (fs7.WriteStream || noop)) && isFn(stream.close);
     };
     var isRequest = function(stream) {
       return stream.setHeader && isFn(stream.abort);
@@ -35866,8 +35866,8 @@ var require_pump = __commonJS({
 // node_modules/mkdirp-classic/index.js
 var require_mkdirp_classic = __commonJS({
   "node_modules/mkdirp-classic/index.js"(exports2, module2) {
-    var path9 = require("path");
-    var fs9 = require("fs");
+    var path7 = require("path");
+    var fs7 = require("fs");
     var _0777 = parseInt("0777", 8);
     module2.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
     function mkdirP(p, opts, f, made) {
@@ -35878,14 +35878,14 @@ var require_mkdirp_classic = __commonJS({
         opts = { mode: opts };
       }
       var mode = opts.mode;
-      var xfs = opts.fs || fs9;
+      var xfs = opts.fs || fs7;
       if (mode === void 0) {
         mode = _0777 & ~process.umask();
       }
       if (!made) made = null;
       var cb = f || function() {
       };
-      p = path9.resolve(p);
+      p = path7.resolve(p);
       xfs.mkdir(p, mode, function(er) {
         if (!er) {
           made = made || p;
@@ -35893,7 +35893,7 @@ var require_mkdirp_classic = __commonJS({
         }
         switch (er.code) {
           case "ENOENT":
-            mkdirP(path9.dirname(p), opts, function(er2, made2) {
+            mkdirP(path7.dirname(p), opts, function(er2, made2) {
               if (er2) cb(er2, made2);
               else mkdirP(p, opts, cb, made2);
             });
@@ -35915,19 +35915,19 @@ var require_mkdirp_classic = __commonJS({
         opts = { mode: opts };
       }
       var mode = opts.mode;
-      var xfs = opts.fs || fs9;
+      var xfs = opts.fs || fs7;
       if (mode === void 0) {
         mode = _0777 & ~process.umask();
       }
       if (!made) made = null;
-      p = path9.resolve(p);
+      p = path7.resolve(p);
       try {
         xfs.mkdirSync(p, mode);
         made = made || p;
       } catch (err0) {
         switch (err0.code) {
           case "ENOENT":
-            made = sync(path9.dirname(p), opts, made);
+            made = sync(path7.dirname(p), opts, made);
             sync(p, opts, made);
             break;
           // In the case of any other error, just see if there's a dir
@@ -35956,8 +35956,8 @@ var require_tar_fs = __commonJS({
     var tar2 = require_tar_stream();
     var pump = require_pump();
     var mkdirp = require_mkdirp_classic();
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var os3 = require("os");
     var win32 = os3.platform() === "win32";
     var noop = function() {
@@ -35968,20 +35968,20 @@ var require_tar_fs = __commonJS({
     var normalize = !win32 ? echo : function(name) {
       return name.replace(/\\/g, "/").replace(/[:?<>|]/g, "_");
     };
-    var statAll = function(fs10, stat, cwd, ignore, entries, sort) {
+    var statAll = function(fs8, stat, cwd, ignore, entries, sort) {
       var queue = entries || ["."];
       return function loop(callback) {
         if (!queue.length) return callback();
         var next = queue.shift();
-        var nextAbs = path9.join(cwd, next);
-        stat.call(fs10, nextAbs, function(err, stat2) {
+        var nextAbs = path7.join(cwd, next);
+        stat.call(fs8, nextAbs, function(err, stat2) {
           if (err) return callback(err);
           if (!stat2.isDirectory()) return callback(null, next, stat2);
-          fs10.readdir(nextAbs, function(err2, files) {
+          fs8.readdir(nextAbs, function(err2, files) {
             if (err2) return callback(err2);
             if (sort) files.sort();
             for (var i = 0; i < files.length; i++) {
-              if (!ignore(path9.join(cwd, next, files[i]))) queue.push(path9.join(next, files[i]));
+              if (!ignore(path7.join(cwd, next, files[i]))) queue.push(path7.join(next, files[i]));
             }
             callback(null, next, stat2);
           });
@@ -35992,7 +35992,7 @@ var require_tar_fs = __commonJS({
       return function(header) {
         header.name = header.name.split("/").slice(level).join("/");
         var linkname = header.linkname;
-        if (linkname && (header.type === "link" || path9.isAbsolute(linkname))) {
+        if (linkname && (header.type === "link" || path7.isAbsolute(linkname))) {
           header.linkname = linkname.split("/").slice(level).join("/");
         }
         return map2(header);
@@ -36001,7 +36001,7 @@ var require_tar_fs = __commonJS({
     exports2.pack = function(cwd, opts) {
       if (!cwd) cwd = ".";
       if (!opts) opts = {};
-      var xfs = opts.fs || fs9;
+      var xfs = opts.fs || fs7;
       var ignore = opts.ignore || opts.filter || noop;
       var map2 = opts.map || noop;
       var mapStream = opts.mapStream || echo;
@@ -36022,7 +36022,7 @@ var require_tar_fs = __commonJS({
         fmode |= parseInt(222, 8);
       }
       var onsymlink = function(filename, header) {
-        xfs.readlink(path9.join(cwd, filename), function(err, linkname) {
+        xfs.readlink(path7.join(cwd, filename), function(err, linkname) {
           if (err) return pack2.destroy(err);
           header.linkname = normalize(linkname);
           pack2.entry(header, onnextentry);
@@ -36063,7 +36063,7 @@ var require_tar_fs = __commonJS({
         }
         var entry = pack2.entry(header, onnextentry);
         if (!entry) return;
-        var rs = mapStream(xfs.createReadStream(path9.join(cwd, filename), { start: 0, end: header.size > 0 ? header.size - 1 : header.size }), header);
+        var rs = mapStream(xfs.createReadStream(path7.join(cwd, filename), { start: 0, end: header.size > 0 ? header.size - 1 : header.size }), header);
         rs.on("error", function(err2) {
           entry.destroy(err2);
         });
@@ -36088,7 +36088,7 @@ var require_tar_fs = __commonJS({
     exports2.extract = function(cwd, opts) {
       if (!cwd) cwd = ".";
       if (!opts) opts = {};
-      var xfs = opts.fs || fs9;
+      var xfs = opts.fs || fs7;
       var ignore = opts.ignore || opts.filter || noop;
       var map2 = opts.map || noop;
       var mapStream = opts.mapStream || echo;
@@ -36141,7 +36141,7 @@ var require_tar_fs = __commonJS({
       extract.on("entry", function(header, stream, next) {
         header = map2(header) || header;
         header.name = normalize(header.name);
-        var name = path9.join(cwd, path9.join("/", header.name));
+        var name = path7.join(cwd, path7.join("/", header.name));
         if (ignore(name, header)) {
           stream.resume();
           return next();
@@ -36157,7 +36157,7 @@ var require_tar_fs = __commonJS({
         var onsymlink = function() {
           if (win32) return next();
           xfs.unlink(name, function() {
-            var dst = path9.resolve(path9.dirname(name), header.linkname);
+            var dst = path7.resolve(path7.dirname(name), header.linkname);
             if (!inCwd(dst, cwd)) return next(new Error(name + " is not a valid symlink"));
             xfs.symlink(header.linkname, name, stat);
           });
@@ -36165,7 +36165,7 @@ var require_tar_fs = __commonJS({
         var onlink = function() {
           if (win32) return next();
           xfs.unlink(name, function() {
-            var srcpath = path9.join(cwd, path9.join("/", header.linkname));
+            var srcpath = path7.join(cwd, path7.join("/", header.linkname));
             xfs.realpath(srcpath, function(err, dst) {
               if (err || !inCwd(dst, cwd)) return next(new Error(name + " is not a valid hardlink"));
               xfs.link(dst, name, function(err2) {
@@ -36198,8 +36198,8 @@ var require_tar_fs = __commonJS({
             gid: header.gid
           }, stat);
         }
-        var dir = path9.dirname(name);
-        validate3(xfs, dir, path9.join(cwd, "."), function(err, valid) {
+        var dir = path7.dirname(name);
+        validate3(xfs, dir, path7.join(cwd, "."), function(err, valid) {
           if (err) return next(err);
           if (!valid) return next(new Error(dir + " is not a valid path"));
           mkdirfix(dir, {
@@ -36226,11 +36226,11 @@ var require_tar_fs = __commonJS({
       if (opts.finish) extract.on("finish", opts.finish);
       return extract;
     };
-    function validate3(fs10, name, root, cb) {
+    function validate3(fs8, name, root, cb) {
       if (name === root) return cb(null, true);
-      fs10.lstat(name, function(err, st) {
+      fs8.lstat(name, function(err, st) {
         if (err && err.code !== "ENOENT") return cb(err);
-        if (err || st.isDirectory()) return validate3(fs10, path9.join(name, ".."), root, cb);
+        if (err || st.isDirectory()) return validate3(fs8, path7.join(name, ".."), root, cb);
         cb(null, false);
       });
     }
@@ -36244,8 +36244,8 @@ var require_tar_fs = __commonJS({
       });
     }
     function inCwd(dst, cwd) {
-      cwd = path9.resolve(cwd);
-      return cwd === dst || dst.startsWith(cwd + path9.sep);
+      cwd = path7.resolve(cwd);
+      return cwd === dst || dst.startsWith(cwd + path7.sep);
     }
   }
 });
@@ -36254,8 +36254,8 @@ var require_tar_fs = __commonJS({
 var require_util2 = __commonJS({
   "node_modules/dockerode/lib/util.js"(exports2, module2) {
     var DockerIgnore = require_ignore();
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var tar2 = require_tar_fs();
     var zlib = require("zlib");
     var arr = [];
@@ -36307,14 +36307,14 @@ var require_util2 = __commonJS({
     };
     module2.exports.prepareBuildContext = function(file, next) {
       if (file && file.context) {
-        fs9.readFile(path9.join(file.context, ".dockerignore"), (err, data) => {
+        fs7.readFile(path7.join(file.context, ".dockerignore"), (err, data) => {
           let ignoreFn;
           let filterFn;
           if (!err) {
             const dockerIgnore = DockerIgnore({ ignorecase: false }).add(data.toString());
             filterFn = dockerIgnore.createFilter();
-            ignoreFn = (path10) => {
-              return !filterFn(path10);
+            ignoreFn = (path8) => {
+              return !filterFn(path8);
             };
           }
           const entries = file.src.slice() || [];
@@ -39224,14 +39224,14 @@ var require_tls_helpers = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.CIPHER_SUITES = void 0;
     exports2.getDefaultRootsData = getDefaultRootsData;
-    var fs9 = require("fs");
+    var fs7 = require("fs");
     exports2.CIPHER_SUITES = process.env.GRPC_SSL_CIPHER_SUITES;
     var DEFAULT_ROOTS_FILE_PATH = process.env.GRPC_DEFAULT_SSL_ROOTS_FILE_PATH;
     var defaultRootsData = null;
     function getDefaultRootsData() {
       if (DEFAULT_ROOTS_FILE_PATH) {
         if (defaultRootsData === null) {
-          defaultRootsData = fs9.readFileSync(DEFAULT_ROOTS_FILE_PATH);
+          defaultRootsData = fs7.readFileSync(DEFAULT_ROOTS_FILE_PATH);
         }
         return defaultRootsData;
       }
@@ -39262,19 +39262,19 @@ var require_uri_parser = __commonJS({
       };
     }
     var NUMBER_REGEX = /^\d+$/;
-    function splitHostPort(path9) {
-      if (path9.startsWith("[")) {
-        const hostEnd = path9.indexOf("]");
+    function splitHostPort(path7) {
+      if (path7.startsWith("[")) {
+        const hostEnd = path7.indexOf("]");
         if (hostEnd === -1) {
           return null;
         }
-        const host = path9.substring(1, hostEnd);
+        const host = path7.substring(1, hostEnd);
         if (host.indexOf(":") === -1) {
           return null;
         }
-        if (path9.length > hostEnd + 1) {
-          if (path9[hostEnd + 1] === ":") {
-            const portString = path9.substring(hostEnd + 2);
+        if (path7.length > hostEnd + 1) {
+          if (path7[hostEnd + 1] === ":") {
+            const portString = path7.substring(hostEnd + 2);
             if (NUMBER_REGEX.test(portString)) {
               return {
                 host,
@@ -39292,7 +39292,7 @@ var require_uri_parser = __commonJS({
           };
         }
       } else {
-        const splitPath = path9.split(":");
+        const splitPath = path7.split(":");
         if (splitPath.length === 2) {
           if (NUMBER_REGEX.test(splitPath[1])) {
             return {
@@ -39304,7 +39304,7 @@ var require_uri_parser = __commonJS({
           }
         } else {
           return {
-            host: path9
+            host: path7
           };
         }
       }
@@ -42304,14 +42304,14 @@ var require_client_interceptors = __commonJS({
       }
     };
     exports2.InterceptingCall = InterceptingCall;
-    function getCall(channel, path9, options) {
+    function getCall(channel, path7, options) {
       var _a, _b;
       const deadline = (_a = options.deadline) !== null && _a !== void 0 ? _a : Infinity;
       const host = options.host;
       const parent = (_b = options.parent) !== null && _b !== void 0 ? _b : null;
       const propagateFlags = options.propagate_flags;
       const credentials = options.credentials;
-      const call = channel.createCall(path9, deadline, host, parent, propagateFlags);
+      const call = channel.createCall(path7, deadline, host, parent, propagateFlags);
       if (credentials) {
         call.setCredentials(credentials);
       }
@@ -42881,9 +42881,9 @@ var require_make_client = __commonJS({
       ServiceClientImpl.serviceName = serviceName;
       return ServiceClientImpl;
     }
-    function partial(fn, path9, serialize, deserialize) {
+    function partial(fn, path7, serialize, deserialize) {
       return function(...args) {
-        return fn.call(this, path9, serialize, deserialize, ...args);
+        return fn.call(this, path7, serialize, deserialize, ...args);
       };
     }
     function isProtobufTypeDefinition(obj) {
@@ -44738,7 +44738,7 @@ var require_fetch = __commonJS({
     module2.exports = fetch2;
     var asPromise = require_aspromise();
     var inquire2 = require_inquire();
-    var fs9 = inquire2("fs");
+    var fs7 = inquire2("fs");
     function fetch2(filename, options, callback) {
       if (typeof options === "function") {
         callback = options;
@@ -44747,8 +44747,8 @@ var require_fetch = __commonJS({
         options = {};
       if (!callback)
         return asPromise(fetch2, this, filename, options);
-      if (!options.xhr && fs9 && fs9.readFile)
-        return fs9.readFile(filename, function fetchReadFileCallback(err, contents) {
+      if (!options.xhr && fs7 && fs7.readFile)
+        return fs7.readFile(filename, function fetchReadFileCallback(err, contents) {
           return err && typeof XMLHttpRequest !== "undefined" ? fetch2.xhr(filename, options, callback) : err ? callback(err) : callback(null, options.binary ? contents : contents.toString("utf8"));
         });
       return fetch2.xhr(filename, options, callback);
@@ -44786,15 +44786,15 @@ var require_fetch = __commonJS({
 var require_path = __commonJS({
   "node_modules/@protobufjs/path/index.js"(exports2) {
     "use strict";
-    var path9 = exports2;
+    var path7 = exports2;
     var isAbsolute = (
       /**
        * Tests if the specified path is absolute.
        * @param {string} path Path to test
        * @returns {boolean} `true` if path is absolute
        */
-      path9.isAbsolute = function isAbsolute2(path10) {
-        return /^(?:\/|\w+:)/.test(path10);
+      path7.isAbsolute = function isAbsolute2(path8) {
+        return /^(?:\/|\w+:)/.test(path8);
       }
     );
     var normalize = (
@@ -44803,9 +44803,9 @@ var require_path = __commonJS({
        * @param {string} path Path to normalize
        * @returns {string} Normalized path
        */
-      path9.normalize = function normalize2(path10) {
-        path10 = path10.replace(/\\/g, "/").replace(/\/{2,}/g, "/");
-        var parts = path10.split("/"), absolute = isAbsolute(path10), prefix2 = "";
+      path7.normalize = function normalize2(path8) {
+        path8 = path8.replace(/\\/g, "/").replace(/\/{2,}/g, "/");
+        var parts = path8.split("/"), absolute = isAbsolute(path8), prefix2 = "";
         if (absolute)
           prefix2 = parts.shift() + "/";
         for (var i = 0; i < parts.length; ) {
@@ -44824,7 +44824,7 @@ var require_path = __commonJS({
         return prefix2 + parts.join("/");
       }
     );
-    path9.resolve = function resolve(originPath, includePath, alreadyNormalized) {
+    path7.resolve = function resolve(originPath, includePath, alreadyNormalized) {
       if (!alreadyNormalized)
         includePath = normalize(includePath);
       if (isAbsolute(includePath))
@@ -44975,16 +44975,16 @@ var require_namespace = __commonJS({
       object.onRemove(this);
       return clearCache(this);
     };
-    Namespace.prototype.define = function define2(path9, json2) {
-      if (util.isString(path9))
-        path9 = path9.split(".");
-      else if (!Array.isArray(path9))
+    Namespace.prototype.define = function define2(path7, json2) {
+      if (util.isString(path7))
+        path7 = path7.split(".");
+      else if (!Array.isArray(path7))
         throw TypeError("illegal path");
-      if (path9 && path9.length && path9[0] === "")
+      if (path7 && path7.length && path7[0] === "")
         throw Error("path must be relative");
       var ptr = this;
-      while (path9.length > 0) {
-        var part = path9.shift();
+      while (path7.length > 0) {
+        var part = path7.shift();
         if (ptr.nested && ptr.nested[part]) {
           ptr = ptr.nested[part];
           if (!(ptr instanceof Namespace))
@@ -45019,26 +45019,26 @@ var require_namespace = __commonJS({
       });
       return this;
     };
-    Namespace.prototype.lookup = function lookup(path9, filterTypes, parentAlreadyChecked) {
+    Namespace.prototype.lookup = function lookup(path7, filterTypes, parentAlreadyChecked) {
       if (typeof filterTypes === "boolean") {
         parentAlreadyChecked = filterTypes;
         filterTypes = void 0;
       } else if (filterTypes && !Array.isArray(filterTypes))
         filterTypes = [filterTypes];
-      if (util.isString(path9) && path9.length) {
-        if (path9 === ".")
+      if (util.isString(path7) && path7.length) {
+        if (path7 === ".")
           return this.root;
-        path9 = path9.split(".");
-      } else if (!path9.length)
+        path7 = path7.split(".");
+      } else if (!path7.length)
         return this;
-      var flatPath = path9.join(".");
-      if (path9[0] === "")
-        return this.root.lookup(path9.slice(1), filterTypes);
+      var flatPath = path7.join(".");
+      if (path7[0] === "")
+        return this.root.lookup(path7.slice(1), filterTypes);
       var found = this.root._fullyQualifiedObjects && this.root._fullyQualifiedObjects["." + flatPath];
       if (found && (!filterTypes || filterTypes.indexOf(found.constructor) > -1)) {
         return found;
       }
-      found = this._lookupImpl(path9, flatPath);
+      found = this._lookupImpl(path7, flatPath);
       if (found && (!filterTypes || filterTypes.indexOf(found.constructor) > -1)) {
         return found;
       }
@@ -45046,7 +45046,7 @@ var require_namespace = __commonJS({
         return null;
       var current = this;
       while (current.parent) {
-        found = current.parent._lookupImpl(path9, flatPath);
+        found = current.parent._lookupImpl(path7, flatPath);
         if (found && (!filterTypes || filterTypes.indexOf(found.constructor) > -1)) {
           return found;
         }
@@ -45054,49 +45054,49 @@ var require_namespace = __commonJS({
       }
       return null;
     };
-    Namespace.prototype._lookupImpl = function lookup(path9, flatPath) {
+    Namespace.prototype._lookupImpl = function lookup(path7, flatPath) {
       if (Object.prototype.hasOwnProperty.call(this._lookupCache, flatPath)) {
         return this._lookupCache[flatPath];
       }
-      var found = this.get(path9[0]);
+      var found = this.get(path7[0]);
       var exact = null;
       if (found) {
-        if (path9.length === 1) {
+        if (path7.length === 1) {
           exact = found;
         } else if (found instanceof Namespace) {
-          path9 = path9.slice(1);
-          exact = found._lookupImpl(path9, path9.join("."));
+          path7 = path7.slice(1);
+          exact = found._lookupImpl(path7, path7.join("."));
         }
       } else {
         for (var i = 0; i < this.nestedArray.length; ++i)
-          if (this._nestedArray[i] instanceof Namespace && (found = this._nestedArray[i]._lookupImpl(path9, flatPath)))
+          if (this._nestedArray[i] instanceof Namespace && (found = this._nestedArray[i]._lookupImpl(path7, flatPath)))
             exact = found;
       }
       this._lookupCache[flatPath] = exact;
       return exact;
     };
-    Namespace.prototype.lookupType = function lookupType(path9) {
-      var found = this.lookup(path9, [Type]);
+    Namespace.prototype.lookupType = function lookupType(path7) {
+      var found = this.lookup(path7, [Type]);
       if (!found)
-        throw Error("no such type: " + path9);
+        throw Error("no such type: " + path7);
       return found;
     };
-    Namespace.prototype.lookupEnum = function lookupEnum(path9) {
-      var found = this.lookup(path9, [Enum]);
+    Namespace.prototype.lookupEnum = function lookupEnum(path7) {
+      var found = this.lookup(path7, [Enum]);
       if (!found)
-        throw Error("no such Enum '" + path9 + "' in " + this);
+        throw Error("no such Enum '" + path7 + "' in " + this);
       return found;
     };
-    Namespace.prototype.lookupTypeOrEnum = function lookupTypeOrEnum(path9) {
-      var found = this.lookup(path9, [Type, Enum]);
+    Namespace.prototype.lookupTypeOrEnum = function lookupTypeOrEnum(path7) {
+      var found = this.lookup(path7, [Type, Enum]);
       if (!found)
-        throw Error("no such Type or Enum '" + path9 + "' in " + this);
+        throw Error("no such Type or Enum '" + path7 + "' in " + this);
       return found;
     };
-    Namespace.prototype.lookupService = function lookupService(path9) {
-      var found = this.lookup(path9, [Service2]);
+    Namespace.prototype.lookupService = function lookupService(path7) {
+      var found = this.lookup(path7, [Service2]);
       if (!found)
-        throw Error("no such Service '" + path9 + "' in " + this);
+        throw Error("no such Service '" + path7 + "' in " + this);
       return found;
     };
     Namespace._configure = function(Type_, Service_, Enum_) {
@@ -46459,14 +46459,14 @@ var require_util3 = __commonJS({
       Object.defineProperty(object, "$type", { value: enm, enumerable: false });
       return enm;
     };
-    util.setProperty = function setProperty(dst, path9, value, ifNotSet) {
-      function setProp(dst2, path10, value2) {
-        var part = path10.shift();
+    util.setProperty = function setProperty(dst, path7, value, ifNotSet) {
+      function setProp(dst2, path8, value2) {
+        var part = path8.shift();
         if (part === "__proto__" || part === "prototype") {
           return dst2;
         }
-        if (path10.length > 0) {
-          dst2[part] = setProp(dst2[part] || {}, path10, value2);
+        if (path8.length > 0) {
+          dst2[part] = setProp(dst2[part] || {}, path8, value2);
         } else {
           var prevValue = dst2[part];
           if (prevValue && ifNotSet)
@@ -46479,10 +46479,10 @@ var require_util3 = __commonJS({
       }
       if (typeof dst !== "object")
         throw TypeError("dst must be an object");
-      if (!path9)
+      if (!path7)
         throw TypeError("path must be specified");
-      path9 = path9.split(".");
-      return setProp(dst, path9, value);
+      path7 = path7.split(".");
+      return setProp(dst, path7, value);
     };
     Object.defineProperty(util, "decorateRoot", {
       get: function() {
@@ -47028,12 +47028,12 @@ var require_object = __commonJS({
        */
       fullName: {
         get: function() {
-          var path9 = [this.name], ptr = this.parent;
+          var path7 = [this.name], ptr = this.parent;
           while (ptr) {
-            path9.unshift(ptr.name);
+            path7.unshift(ptr.name);
             ptr = ptr.parent;
           }
-          return path9.join(".");
+          return path7.join(".");
         }
       }
     });
@@ -51022,19 +51022,19 @@ var require_util4 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.addCommonProtos = exports2.loadProtosWithOptionsSync = exports2.loadProtosWithOptions = void 0;
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var Protobuf = require_protobufjs();
     function addIncludePathResolver(root, includePaths) {
       const originalResolvePath = root.resolvePath;
       root.resolvePath = (origin, target) => {
-        if (path9.isAbsolute(target)) {
+        if (path7.isAbsolute(target)) {
           return target;
         }
         for (const directory of includePaths) {
-          const fullPath = path9.join(directory, target);
+          const fullPath = path7.join(directory, target);
           try {
-            fs9.accessSync(fullPath, fs9.constants.R_OK);
+            fs7.accessSync(fullPath, fs7.constants.R_OK);
             return fullPath;
           } catch (err) {
             continue;
@@ -57338,9 +57338,9 @@ var require_server_call = __commonJS({
       return status;
     }
     var ServerUnaryCallImpl = class extends events_1.EventEmitter {
-      constructor(path9, call, metadata, request) {
+      constructor(path7, call, metadata, request) {
         super();
-        this.path = path9;
+        this.path = path7;
         this.call = call;
         this.metadata = metadata;
         this.request = request;
@@ -57370,9 +57370,9 @@ var require_server_call = __commonJS({
     };
     exports2.ServerUnaryCallImpl = ServerUnaryCallImpl;
     var ServerReadableStreamImpl = class extends stream_1.Readable {
-      constructor(path9, call, metadata) {
+      constructor(path7, call, metadata) {
         super({ objectMode: true });
-        this.path = path9;
+        this.path = path7;
         this.call = call;
         this.metadata = metadata;
         this.cancelled = false;
@@ -57404,9 +57404,9 @@ var require_server_call = __commonJS({
     };
     exports2.ServerReadableStreamImpl = ServerReadableStreamImpl;
     var ServerWritableStreamImpl = class extends stream_1.Writable {
-      constructor(path9, call, metadata, request) {
+      constructor(path7, call, metadata, request) {
         super({ objectMode: true });
-        this.path = path9;
+        this.path = path7;
         this.call = call;
         this.metadata = metadata;
         this.request = request;
@@ -57460,9 +57460,9 @@ var require_server_call = __commonJS({
     };
     exports2.ServerWritableStreamImpl = ServerWritableStreamImpl;
     var ServerDuplexStreamImpl = class extends stream_1.Duplex {
-      constructor(path9, call, metadata) {
+      constructor(path7, call, metadata) {
         super({ objectMode: true });
-        this.path = path9;
+        this.path = path7;
         this.call = call;
         this.metadata = metadata;
         this.pendingStatus = {
@@ -59738,11 +59738,11 @@ var require_server2 = __commonJS({
           }
           return true;
         }
-        _retrieveHandler(path9) {
-          serverCallTrace("Received call to method " + path9 + " at address " + this.serverAddressString);
-          const handler = this.handlers.get(path9);
+        _retrieveHandler(path7) {
+          serverCallTrace("Received call to method " + path7 + " at address " + this.serverAddressString);
+          const handler = this.handlers.get(path7);
           if (handler === void 0) {
-            serverCallTrace("No handler registered for method " + path9 + ". Sending UNIMPLEMENTED status.");
+            serverCallTrace("No handler registered for method " + path7 + ". Sending UNIMPLEMENTED status.");
             return null;
           }
           return handler;
@@ -59764,10 +59764,10 @@ var require_server2 = __commonJS({
             channelzSessionInfo === null || channelzSessionInfo === void 0 ? void 0 : channelzSessionInfo.streamTracker.addCallFailed();
             return;
           }
-          const path9 = headers[HTTP2_HEADER_PATH];
-          const handler = this._retrieveHandler(path9);
+          const path7 = headers[HTTP2_HEADER_PATH];
+          const handler = this._retrieveHandler(path7);
           if (!handler) {
-            this._respondWithError(getUnimplementedStatusResponse(path9), stream, channelzSessionInfo);
+            this._respondWithError(getUnimplementedStatusResponse(path7), stream, channelzSessionInfo);
             return;
           }
           const callEventTracker = {
@@ -59815,10 +59815,10 @@ var require_server2 = __commonJS({
           if (this._verifyContentType(stream, headers) !== true) {
             return;
           }
-          const path9 = headers[HTTP2_HEADER_PATH];
-          const handler = this._retrieveHandler(path9);
+          const path7 = headers[HTTP2_HEADER_PATH];
+          const handler = this._retrieveHandler(path7);
           if (!handler) {
-            this._respondWithError(getUnimplementedStatusResponse(path9), stream, null);
+            this._respondWithError(getUnimplementedStatusResponse(path7), stream, null);
             return;
           }
           const call = (0, server_interceptors_1.getServerInterceptingCall)([...extraInterceptors, ...this.interceptors], stream, headers, null, handler, this.options);
@@ -60839,7 +60839,7 @@ var require_certificate_provider = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.FileWatcherCertificateProvider = void 0;
-    var fs9 = require("fs");
+    var fs7 = require("fs");
     var logging = require_logging();
     var constants_1 = require_constants2();
     var util_1 = require("util");
@@ -60847,7 +60847,7 @@ var require_certificate_provider = __commonJS({
     function trace(text) {
       logging.trace(constants_1.LogVerbosity.DEBUG, TRACER_NAME, text);
     }
-    var readFilePromise = (0, util_1.promisify)(fs9.readFile);
+    var readFilePromise = (0, util_1.promisify)(fs7.readFile);
     var FileWatcherCertificateProvider = class {
       constructor(config) {
         this.config = config;
@@ -61102,13 +61102,13 @@ var require_resolver_uds = __commonJS({
         this.listener = listener;
         this.hasReturnedResult = false;
         this.endpoints = [];
-        let path9;
+        let path7;
         if (target.authority === "") {
-          path9 = "/" + target.path;
+          path7 = "/" + target.path;
         } else {
-          path9 = target.path;
+          path7 = target.path;
         }
-        this.endpoints = [{ addresses: [{ path: path9 }] }];
+        this.endpoints = [{ addresses: [{ path: path7 }] }];
       }
       updateResolution() {
         if (!this.hasReturnedResult) {
@@ -61168,12 +61168,12 @@ var require_resolver_ip = __commonJS({
           return;
         }
         const pathList = target.path.split(",");
-        for (const path9 of pathList) {
-          const hostPort = (0, uri_parser_1.splitHostPort)(path9);
+        for (const path7 of pathList) {
+          const hostPort = (0, uri_parser_1.splitHostPort)(path7);
           if (hostPort === null) {
             this.error = {
               code: constants_1.Status.UNAVAILABLE,
-              details: `Failed to parse ${target.scheme} address ${path9}`,
+              details: `Failed to parse ${target.scheme} address ${path7}`,
               metadata: new metadata_1.Metadata()
             };
             return;
@@ -61181,7 +61181,7 @@ var require_resolver_ip = __commonJS({
           if (target.scheme === IPV4_SCHEME && !(0, net_1.isIPv4)(hostPort.host) || target.scheme === IPV6_SCHEME && !(0, net_1.isIPv6)(hostPort.host)) {
             this.error = {
               code: constants_1.Status.UNAVAILABLE,
-              details: `Failed to parse ${target.scheme} address ${path9}`,
+              details: `Failed to parse ${target.scheme} address ${path7}`,
               metadata: new metadata_1.Metadata()
             };
             return;
@@ -62536,19 +62536,19 @@ var require_util5 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.addCommonProtos = exports2.loadProtosWithOptionsSync = exports2.loadProtosWithOptions = void 0;
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var Protobuf = require_protobufjs();
     function addIncludePathResolver(root, includePaths) {
       const originalResolvePath = root.resolvePath;
       root.resolvePath = (origin, target) => {
-        if (path9.isAbsolute(target)) {
+        if (path7.isAbsolute(target)) {
           return target;
         }
         for (const directory of includePaths) {
-          const fullPath = path9.join(directory, target);
+          const fullPath = path7.join(directory, target);
           try {
-            fs9.accessSync(fullPath, fs9.constants.R_OK);
+            fs7.accessSync(fullPath, fs7.constants.R_OK);
             return fullPath;
           } catch (err) {
             continue;
@@ -63307,7 +63307,7 @@ var require_session = __commonJS({
   "node_modules/dockerode/lib/session.js"(exports2, module2) {
     var grpc = require_src4();
     var protoLoader = require_src5();
-    var path9 = require("path");
+    var path7 = require("path");
     var uuid = (init_esm_node(), __toCommonJS(esm_node_exports)).v4;
     function withSession(docker, auth, handler) {
       const sessionId = uuid();
@@ -63334,7 +63334,7 @@ var require_session = __commonJS({
         const injector = server.createConnectionInjector(creds);
         injector.injectConnection(socket);
         const pkg = protoLoader.loadSync(
-          path9.resolve(__dirname, "proto", "auth.proto")
+          path7.resolve(__dirname, "proto", "auth.proto")
         );
         const service = grpc.loadPackageDefinition(pkg);
         server.addService(service.moby.filesync.v1.Auth.service, {
@@ -68842,13 +68842,13 @@ var require_tar_fs2 = __commonJS({
   "node_modules/tar-fs/index.js"(exports2) {
     var tar2 = require_tar_stream2();
     var pump = require_pump();
-    var fs9 = require("fs");
-    var path9 = require("path");
+    var fs7 = require("fs");
+    var path7 = require("path");
     var win32 = (global.Bare ? global.Bare.platform : process.platform) === "win32";
     exports2.pack = function pack2(cwd, opts) {
       if (!cwd) cwd = ".";
       if (!opts) opts = {};
-      const xfs = opts.fs || fs9;
+      const xfs = opts.fs || fs7;
       const ignore = opts.ignore || opts.filter || noop;
       const mapStream = opts.mapStream || echo;
       const statNext = statAll(xfs, opts.dereference ? xfs.stat : xfs.lstat, cwd, ignore, opts.entries, opts.sort);
@@ -68870,7 +68870,7 @@ var require_tar_fs2 = __commonJS({
       }
       onnextentry();
       function onsymlink(filename, header) {
-        xfs.readlink(path9.join(cwd, filename), function(err, linkname) {
+        xfs.readlink(path7.join(cwd, filename), function(err, linkname) {
           if (err) return pack3.destroy(err);
           header.linkname = normalize(linkname);
           pack3.entry(header, onnextentry);
@@ -68911,7 +68911,7 @@ var require_tar_fs2 = __commonJS({
           return onnextentry();
         }
         const entry = pack3.entry(header, onnextentry);
-        const rs = mapStream(xfs.createReadStream(path9.join(cwd, filename), { start: 0, end: header.size > 0 ? header.size - 1 : header.size }), header);
+        const rs = mapStream(xfs.createReadStream(path7.join(cwd, filename), { start: 0, end: header.size > 0 ? header.size - 1 : header.size }), header);
         rs.on("error", function(err2) {
           entry.destroy(err2);
         });
@@ -68935,8 +68935,8 @@ var require_tar_fs2 = __commonJS({
     exports2.extract = function extract(cwd, opts) {
       if (!cwd) cwd = ".";
       if (!opts) opts = {};
-      cwd = path9.resolve(cwd);
-      const xfs = opts.fs || fs9;
+      cwd = path7.resolve(cwd);
+      const xfs = opts.fs || fs7;
       const ignore = opts.ignore || opts.filter || noop;
       const mapStream = opts.mapStream || echo;
       const own = opts.chown !== false && !win32 && processGetuid() === 0;
@@ -68964,13 +68964,13 @@ var require_tar_fs2 = __commonJS({
       function onentry(header, stream, next) {
         header = map2(header) || header;
         header.name = normalize(header.name);
-        const name = path9.join(cwd, path9.join("/", header.name));
+        const name = path7.join(cwd, path7.join("/", header.name));
         if (ignore(name, header)) {
           stream.resume();
           return next();
         }
-        const dir = path9.join(name, ".") === path9.join(cwd, ".") ? cwd : path9.dirname(name);
-        validate3(xfs, dir, path9.join(cwd, "."), function(err, valid) {
+        const dir = path7.join(name, ".") === path7.join(cwd, ".") ? cwd : path7.dirname(name);
+        validate3(xfs, dir, path7.join(cwd, "."), function(err, valid) {
           if (err) return next(err);
           if (!valid) return next(new Error(dir + " is not a valid path"));
           if (header.type === "directory") {
@@ -69018,7 +69018,7 @@ var require_tar_fs2 = __commonJS({
         function onsymlink() {
           if (win32) return next();
           xfs.unlink(name, function() {
-            const dst = path9.resolve(path9.dirname(name), header.linkname);
+            const dst = path7.resolve(path7.dirname(name), header.linkname);
             if (!inCwd(dst) && validateSymLinks) return next(new Error(name + " is not a valid symlink"));
             xfs.symlink(header.linkname, name, stat);
           });
@@ -69026,8 +69026,8 @@ var require_tar_fs2 = __commonJS({
         function onlink() {
           if (win32) return next();
           xfs.unlink(name, function() {
-            const link = path9.join(cwd, path9.join("/", header.linkname));
-            fs9.realpath(link, function(err, dst) {
+            const link = path7.join(cwd, path7.join("/", header.linkname));
+            fs7.realpath(link, function(err, dst) {
               if (err || !inCwd(dst)) return next(new Error(name + " is not a valid hardlink"));
               xfs.link(dst, name, function(err2) {
                 if (err2 && err2.code === "EPERM" && opts.hardlinkAsFilesFallback) {
@@ -69040,7 +69040,7 @@ var require_tar_fs2 = __commonJS({
           });
         }
         function inCwd(dst) {
-          return dst === cwd || dst.startsWith(cwd + path9.sep);
+          return dst === cwd || dst.startsWith(cwd + path7.sep);
         }
         function onfile() {
           const ws = xfs.createWriteStream(name);
@@ -69094,11 +69094,11 @@ var require_tar_fs2 = __commonJS({
         });
       }
     };
-    function validate3(fs10, name, root, cb) {
+    function validate3(fs8, name, root, cb) {
       if (name === root) return cb(null, true);
-      fs10.lstat(name, function(err, st) {
+      fs8.lstat(name, function(err, st) {
         if (err && err.code !== "ENOENT" && err.code !== "EPERM") return cb(err);
-        if (err || st.isDirectory()) return validate3(fs10, path9.join(name, ".."), root, cb);
+        if (err || st.isDirectory()) return validate3(fs8, path7.join(name, ".."), root, cb);
         cb(null, false);
       });
     }
@@ -69110,21 +69110,21 @@ var require_tar_fs2 = __commonJS({
     function normalize(name) {
       return win32 ? name.replace(/\\/g, "/").replace(/[:?<>|]/g, "_") : name;
     }
-    function statAll(fs10, stat, cwd, ignore, entries, sort) {
+    function statAll(fs8, stat, cwd, ignore, entries, sort) {
       if (!entries) entries = ["."];
       const queue = entries.slice(0);
       return function loop(callback) {
         if (!queue.length) return callback(null);
         const next = queue.shift();
-        const nextAbs = path9.join(cwd, next);
-        stat.call(fs10, nextAbs, function(err, stat2) {
+        const nextAbs = path7.join(cwd, next);
+        stat.call(fs8, nextAbs, function(err, stat2) {
           if (err) return callback(entries.indexOf(next) === -1 && err.code === "ENOENT" ? null : err);
           if (!stat2.isDirectory()) return callback(null, next, stat2);
-          fs10.readdir(nextAbs, function(err2, files) {
+          fs8.readdir(nextAbs, function(err2, files) {
             if (err2) return callback(err2);
             if (sort) files.sort();
             for (let i = 0; i < files.length; i++) {
-              if (!ignore(path9.join(cwd, next, files[i]))) queue.push(path9.join(next, files[i]));
+              if (!ignore(path7.join(cwd, next, files[i]))) queue.push(path7.join(next, files[i]));
             }
             callback(null, next, stat2);
           });
@@ -69135,7 +69135,7 @@ var require_tar_fs2 = __commonJS({
       return function(header) {
         header.name = header.name.split("/").slice(level).join("/");
         const linkname = header.linkname;
-        if (linkname && (header.type === "link" || path9.isAbsolute(linkname))) {
+        if (linkname && (header.type === "link" || path7.isAbsolute(linkname))) {
           header.linkname = linkname.split("/").slice(level).join("/");
         }
         return map2(header);
@@ -69162,7 +69162,7 @@ var {
 } = import_index.default;
 
 // src/config.ts
-var fs7 = __toESM(require("fs"));
+var fs5 = __toESM(require("fs"));
 
 // node_modules/js-yaml/dist/js-yaml.mjs
 function isNothing(subject) {
@@ -71786,7 +71786,7 @@ var handleError = (error2) => {
   if (typeof error2 !== "object" || !("command" in error2)) {
     logger.info(`Ejecuta oton-pilot --help para obtener ayuda.`);
   }
-  throw error2;
+  process.exit(1);
 };
 
 // src/templates/collection.ts
@@ -75076,12 +75076,8 @@ var import_fs3 = __toESM(require("fs"));
 var node22_default = new class {
   constructor() {
     this.name = "node22";
-    this.port = 80;
+    this.port = 3e3;
     this.process = (resource) => {
-      const [fileName, handlerName] = resource.handler.split(".");
-      if (!fileName || !handlerName) {
-        throw new Error("El handler debe tener el formato 'archivo.funcion' (ej: index.handler)");
-      }
       const filename = "package.json";
       const packagePath = import_path3.default.join(resource.folder.proyect, filename);
       this.port = resource.spec?.port || this.port;
@@ -75089,112 +75085,18 @@ var node22_default = new class {
       const json2 = {
         "name": resource.name,
         "version": resource.version,
-        "main": "serverless-wrapper.js",
-        // El punto de entrada será nuestro wrapper
-        "dependencies": {
-          // No necesitamos dependencias para el wrapper nativo
-        }
+        "main": resource.handler,
+        "dependencies": {}
       };
       if (import_fs3.default.existsSync(packagePath)) {
         const text = import_fs3.default.readFileSync(packagePath, "utf-8");
         const local = JSON.parse(text);
         json2.name = local.name || json2.name;
         json2.version = local.version || json2.version;
-        json2.dependencies = { ...json2.dependencies, ...local.dependencies };
+        json2.dependencies = local.dependencies || json2.dependencies;
       }
+      json2.description ||= resource.description || `Despliegue de ${resource.name}`;
       import_fs3.default.writeFileSync(import_path3.default.join(resource.folder.deploy, filename), JSON.stringify(json2, null, 2));
-      const wrapperPath = import_path3.default.join(__dirname, "wrappers", "node-serverless-native.js");
-      let wrapperContent = import_fs3.default.readFileSync(wrapperPath, "utf-8");
-      wrapperContent = wrapperContent.replace("{{FILENAME}}", fileName).replace("{{HANDLER_NAME}}", handlerName);
-      import_fs3.default.writeFileSync(import_path3.default.join(resource.folder.deploy, "serverless-wrapper.js"), wrapperContent);
-      return true;
-    };
-    this.dockerfileTemplate = `
-FROM node:22-alpine
-WORKDIR /app
-COPY app/package*.json ./
-RUN npm install --production
-COPY app .
-EXPOSE ${this.port}
-CMD ["node", "serverless-wrapper.js"]
-`;
-  }
-}();
-
-// src/templates/python311.ts
-var import_path4 = __toESM(require("path"));
-var import_fs4 = __toESM(require("fs"));
-var python311_default = new class {
-  constructor() {
-    this.name = "python311";
-    this.port = 80;
-    this.process = async (resource) => {
-      const [fileName, handlerName] = resource.handler.split(".");
-      if (!fileName || !handlerName) {
-        throw new Error("El handler debe tener el formato 'archivo.funcion' (ej: main.handler)");
-      }
-      const reqFilename = "requirements.txt";
-      const reqPath = import_path4.default.join(resource.folder.deploy, reqFilename);
-      let requirements = "";
-      if (import_fs4.default.existsSync(reqPath)) {
-        requirements = import_fs4.default.readFileSync(reqPath, "utf-8");
-      }
-      if (!requirements.includes("Flask")) {
-        requirements += "\nFlask==3.0.0\n";
-        import_fs4.default.writeFileSync(reqPath, requirements);
-      }
-      this.port = resource.spec?.port || this.port;
-      resource.environment.PORT ||= this.port;
-      const wrapperPath = import_path4.default.join(__dirname, "wrappers", "python-serverless.py");
-      let wrapperContent = import_fs4.default.readFileSync(wrapperPath, "utf-8");
-      wrapperContent = wrapperContent.replace("{{FILENAME}}", fileName).replace("{{HANDLER_NAME}}", handlerName);
-      import_fs4.default.writeFileSync(import_path4.default.join(resource.folder.deploy, "serverless_wrapper.py"), wrapperContent);
-      return true;
-    };
-    this.dockerfileTemplate = `
-FROM python:3.11-slim
-WORKDIR /app
-COPY app/requirements.txt ./
-RUN pip install --no-cache-dir Flask==3.0.0
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app .
-EXPOSE ${this.port}
-CMD ["python", "serverless_wrapper.py"]
-`;
-  }
-}();
-
-// src/templates/service.ts
-var import_path5 = __toESM(require("path"));
-var import_fs5 = __toESM(require("fs"));
-var service_default = new class {
-  constructor() {
-    this.name = "service";
-    this.type = "task";
-    // We use 'task' to control the deployment flow manually
-    this.port = 3e3;
-    this.process = async (resource) => {
-      this.port = resource.spec?.port || this.port;
-      resource.environment.PORT ||= this.port;
-      resource.folder = {
-        deploy: import_path5.default.join(resource.folder.deploy),
-        code: import_path5.default.join(__dirname, "service"),
-        proyect: import_path5.default.join(__dirname, "service")
-      };
-      const json2 = {
-        "name": resource.name,
-        "version": resource.version,
-        "main": resource.handler,
-        "description": resource.description || `Despliegue de ${resource.name}`,
-        "dependencies": {
-          "@octavio.cubillos/simple-logger-express": "^1.0.11",
-          "express": "^5.1.0",
-          "http-proxy-middleware": "^3.0.5",
-          "sqlite": "^5.1.1",
-          "sqlite3": "^5.1.7"
-        }
-      };
-      import_fs5.default.writeFileSync(import_path5.default.join(resource.folder.deploy, "package.json"), JSON.stringify(json2, null, 2));
       return true;
     };
     this.dockerfileTemplate = `
@@ -75231,26 +75133,24 @@ var templates_default = class {
       return this.templates[name];
     };
     this.register(nginx_default);
+    this.register(node22_default);
     this.register(collection_default);
     this.register(mongodb_default);
-    this.register(node22_default);
-    this.register(python311_default);
-    this.register(service_default);
   }
 };
 
 // src/config.ts
-var import_path6 = __toESM(require("path"));
+var import_path4 = __toESM(require("path"));
 
 // src/user-config.ts
-var fs6 = __toESM(require("fs"));
-var path6 = __toESM(require("path"));
+var fs4 = __toESM(require("fs"));
+var path4 = __toESM(require("path"));
 var os2 = __toESM(require("os"));
-var CONFIG_DIR = path6.join(os2.homedir(), ".config", "oton-pilot");
-var CREDENTIALS_FILE = path6.join(CONFIG_DIR, "config.yaml");
+var CONFIG_DIR = path4.join(os2.homedir(), ".config", "oton-pilot");
+var CREDENTIALS_FILE = path4.join(CONFIG_DIR, "config.yaml");
 function ensureConfigDirExists() {
-  if (!fs6.existsSync(CONFIG_DIR)) {
-    fs6.mkdirSync(CONFIG_DIR, { recursive: true });
+  if (!fs4.existsSync(CONFIG_DIR)) {
+    fs4.mkdirSync(CONFIG_DIR, { recursive: true });
   }
 }
 function saveLocalConfig(config) {
@@ -75258,15 +75158,15 @@ function saveLocalConfig(config) {
   const name = config.name;
   delete config.name;
   configs[name] = config;
-  fs6.writeFileSync(CREDENTIALS_FILE, dump(configs));
+  fs4.writeFileSync(CREDENTIALS_FILE, dump(configs));
 }
 function readConfigs() {
   ensureConfigDirExists();
-  if (!fs6.existsSync(CREDENTIALS_FILE)) {
+  if (!fs4.existsSync(CREDENTIALS_FILE)) {
     return {};
   }
   try {
-    const content = fs6.readFileSync(CREDENTIALS_FILE, "utf-8");
+    const content = fs4.readFileSync(CREDENTIALS_FILE, "utf-8");
     return load(content) || {};
   } catch (error2) {
     return {};
@@ -75276,112 +75176,38 @@ function readConfigs() {
 // src/service.ts
 var Service = class {
   constructor(stack) {
-    this.execute = async (method, path9, body) => {
+    this.isServiceRunning = async () => {
       try {
-        const response = await fetch(`${this.url}${path9}`, {
-          method,
+        const response = await fetch("http://service.localhost:3000/api/health");
+        return response.ok;
+      } catch (error2) {
+        return false;
+      }
+    };
+    this.getLastStatus = async (stackName) => {
+      try {
+        const response = await fetch("http://service.localhost:3000/api/get-last-status/" + stackName);
+        return (await response.json()).data;
+      } catch (error2) {
+        return null;
+      }
+    };
+    this.createOrUpdateDeployment = async (stackName, deploymentDetails) => {
+      try {
+        const response = await fetch(`http://service.localhost:3000/api/deploy/${stackName}`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(deploymentDetails)
         });
-        return await response.json();
+        return response.ok;
       } catch (error2) {
-        console.error("Error executing request:", error2);
-        throw error2;
-      }
-    };
-    this.isServiceRunning = async () => {
-      try {
-        const response = await this.execute("GET", "/api/service/health");
-        return response.success;
-      } catch (error2) {
-        return false;
-      }
-    };
-    this.getByStackName = async (stackName) => {
-      try {
-        const response = await this.execute("GET", `/api/deploy/${stackName}`);
-        return response.data.at(0);
-      } catch (error2) {
-        return null;
-      }
-    };
-    this.getLast = async (stackName) => {
-      try {
-        const response = await this.execute("GET", `/api/deploy/${stackName}?last`);
-        return response.data;
-      } catch (error2) {
-        return null;
-      }
-    };
-    this.create = async (stackName, deploymentDetails) => {
-      try {
-        const response = await this.execute("POST", `/api/deploy/${stackName}`, deploymentDetails);
-        return response.data;
-      } catch (error2) {
-        console.error("Error creating deployment:", error2);
-        throw error2;
-      }
-    };
-    this.update = async (deploymentDetails) => {
-      try {
-        const response = await this.execute("PUT", `/api/deploy/${deploymentDetails.stackName}/${deploymentDetails.id}`, deploymentDetails);
-        return response.data;
-      } catch (error2) {
-        console.error("Error updating deployment:", error2);
-        throw error2;
-      }
-    };
-    this.getProxy = async (subdomain, last) => {
-      try {
-        const response = await this.execute("GET", `/api/proxy/?subdomain=${subdomain}${last ? "&last" : ""}`);
-        return response.data;
-      } catch (error2) {
-        return null;
-      }
-    };
-    this.addProxy = async (subdomain, target) => {
-      try {
-        const response = await this.execute("POST", `/api/proxy`, { subdomain, target });
-        return response.success;
-      } catch (error2) {
-        console.error("Error adding proxy:", error2);
-        return false;
-      }
-    };
-    this.updateProxy = async (id, subdomain, target) => {
-      try {
-        console.log(`Updating proxy for ${subdomain} -> ${target}`);
-        const response = await this.execute("PUT", `/api/proxy/${id}`, { subdomain, target });
-        return response.success;
-      } catch (error2) {
-        console.error("Error updating proxy:", error2);
-        return false;
-      }
-    };
-    this.deleteProxy = async (id) => {
-      try {
-        const response = await this.execute("DELETE", `/api/proxy/${id}`);
-        return response.success;
-      } catch (error2) {
-        console.error("Error deleting proxy:", error2);
-        return false;
-      }
-    };
-    this.addOrUpdateProxy = async (subdomain, target) => {
-      try {
-        console.log(`Adding proxy for ${subdomain} -> ${target}`);
-        const response = await this.execute("POST", `/api/proxy`, { subdomain, target: target + ":3000" });
-        return response.success;
-      } catch (error2) {
-        console.error("Error adding proxy:", error2);
+        console.error("Error creating or updating deployment:", error2);
         return false;
       }
     };
     this.stack = stack;
-    const profile = stack.getProfile();
-    this.url = `http://${profile.service?.host}:${profile.service?.port}`;
   }
 };
 
@@ -75391,9 +75217,6 @@ var FileStack = class {
     this.name = "stack";
     this.getProfile = () => {
       const profileName = this.options.profile;
-      if (this.profile) {
-        return this.profile;
-      }
       const profile = this.config.profile[profileName];
       profile.name = profileName;
       if (!profile) {
@@ -75401,16 +75224,9 @@ var FileStack = class {
       }
       profile.protocol = profile.host ? "ssh" : "local";
       if (!profile.mode) {
-        console.log("profile.mode no esta definido, se agrega docker por defecto");
+        console.log("WWW, profile.mode no esta definido, se agrega docker por defecto");
         profile.mode = "docker";
       }
-      profile.service = {
-        host: profile.host || "service.localhost",
-        port: profile.service?.port || 3e3,
-        proxyHost: profile.service?.proxyHost || profile.host,
-        proxyPort: profile.service?.port || 3e3
-      };
-      this.profile = profile;
       return profile;
     };
     this.getResources = (resourceOptions) => {
@@ -75424,55 +75240,18 @@ var FileStack = class {
           return acc;
         }
         resource = _.merge({}, this.getGlobal(), resource);
-        const profile = this.getProfile();
-        resource.fullName ||= `${name}-${this.name}`;
-        resource.version ||= "1";
-        if (resource.proxy == void 0) {
-          resource.proxy = true;
-        }
-        if (profile.environment) {
-          const globalEnv = {};
-          const resourceEnv = {};
-          for (const [key, value] of Object.entries(profile.environment)) {
-            if (typeof value === "object" && value !== null && !Array.isArray(value) && !(value instanceof Date)) {
-              resourceEnv[key] = value;
-            } else {
-              let envValue = "";
-              if (value === null) {
-                envValue = "";
-              } else if (Array.isArray(value)) {
-                envValue = JSON.stringify(value);
-              } else if (value instanceof Date) {
-                envValue = value.toISOString();
-              } else {
-                envValue = String(value);
-              }
-              globalEnv[key] = envValue;
-            }
-          }
-          resource.environment = _.merge({}, resource.environment, globalEnv);
-          if (resourceEnv[name]) {
-            resource.environment = _.merge({}, resource.environment, resourceEnv[name]);
-          }
-        }
-        if (profile.resources && profile.resources[name]) {
-          resource = _.merge(resource, profile.resources[name]);
-        }
         resource.name = name;
         resource.templateObj = this.templates.getTemplete(resource.template);
         resource.path ||= "";
         resource.folder = {
-          deploy: import_path6.default.join(this.projectPath, ".deploy", name),
-          proyect: import_path6.default.join(this.projectPath, resource.path),
-          code: import_path6.default.join(this.projectPath, resource.path, resource.codeUri || "")
+          deploy: import_path4.default.join(process.cwd(), ".deploy", name),
+          proyect: import_path4.default.join(process.cwd(), resource.path),
+          code: import_path4.default.join(process.cwd(), resource.path, resource.codeUri || "")
         };
         resource.props ||= {};
-        fs7.mkdirSync(resource.folder.deploy, { recursive: true });
+        fs5.mkdirSync(resource.folder.deploy, { recursive: true });
         resource.environment ||= {};
         resource.spec ||= {};
-        resource.updateStatus ||= async (status, log, extraData) => {
-        };
-        resource.extra ||= {};
         acc.push(resource);
         return acc;
       }, []);
@@ -75486,22 +75265,9 @@ var FileStack = class {
       return this.service;
     };
     this.options = globalOptions2;
-    console.log("obteniendo stack...");
     try {
-      this.stack = fs7.readFileSync(globalOptions2.file, "utf-8").trim();
-      this.projectPath = import_path6.default.dirname(import_path6.default.resolve(globalOptions2.file));
+      this.stack = fs5.readFileSync(globalOptions2.file, "utf-8").trim();
       this.config = load(this.stack);
-      const stackDir = import_path6.default.dirname(import_path6.default.resolve(globalOptions2.file));
-      const profilePath = import_path6.default.join(stackDir, "profile.yaml");
-      if (fs7.existsSync(profilePath)) {
-        try {
-          const profileContent = fs7.readFileSync(profilePath, "utf-8");
-          const externalProfile = load(profileContent);
-          this.config.profile = _.merge(this.config.profile || {}, externalProfile);
-        } catch (e) {
-          console.warn("Could not load profile.yaml:", e);
-        }
-      }
       this.config.profile = _.merge({}, readConfigs(), this.config.profile);
       this.name = this.config.name;
       this.templates = new templates_default();
@@ -75516,348 +75282,135 @@ var FileStack = class {
 var import_chalk3 = __toESM(require_source());
 var import_dockerode = __toESM(require_docker());
 var import_cli_table3 = __toESM(require_cli_table3());
-var import_path7 = __toESM(require("path"));
-var import_fs6 = __toESM(require("fs"));
+var import_path5 = __toESM(require("path"));
+var import_fs4 = __toESM(require("fs"));
 var import_promises = __toESM(require("node:readline/promises"));
 var tar = __toESM(require_tar_fs2());
 var import_stream = require("stream");
-var import_child_process = require("child_process");
-var import_util = require("util");
 var COLORS = [import_chalk3.default.cyan, import_chalk3.default.magenta, import_chalk3.default.blue, import_chalk3.default.yellow, import_chalk3.default.green];
-var createLogger = (prefix2, color) => {
-  const p = color(`[${prefix2}]`);
-  const logger2 = ((msg) => console.log(`${p} ${msg}`));
-  logger2.log = (msg) => console.log(`${p} ${msg}`);
-  logger2.error = (msg) => console.error(`${p} ${import_chalk3.default.red(msg)}`);
-  logger2.info = (msg) => console.log(`${p} ${import_chalk3.default.blue(msg)}`);
-  logger2.succeed = (msg) => console.log(`${p} ${import_chalk3.default.green("\u2714 " + msg)}`);
-  logger2.fail = (msg) => console.error(`${p} ${import_chalk3.default.red("\u2716 " + msg)}`);
-  logger2.start = (msg) => console.log(`${p} ${import_chalk3.default.cyan("\u29D7 " + msg)}`);
-  logger2.change = (msg) => console.log(`${p} ${import_chalk3.default.cyan("\u29D7 " + msg)}`);
-  logger2.warn = (msg) => console.log(`${p} ${import_chalk3.default.yellow("\u29D7 " + msg)}`);
-  return logger2;
-};
 var DockerManage = class {
   constructor(stack) {
     this.deploy = async (resourceOptions) => {
       console.log(`Comenzando despliegue a: [${this.profile.protocol}]${this.profile.host || ""}`);
       const service = this.stack.getService();
-      const lastStatus = await service.getLast(this.stack.name);
-      const allResources = this.stack.getResources();
-      const targetNames = resourceOptions && resourceOptions.length > 0 ? resourceOptions : allResources.map((r) => r.name);
-      const resourcesToDeploy = [];
-      const allResourcesWithStatus = [];
+      const lastStatus = await service.getLastStatus(this.stack.name);
+      console.log(lastStatus);
+      const resources = this.stack.getResources(resourceOptions);
       console.log("Calculando diferencias con el despliegue anterior...");
       const lastResourcesMap = /* @__PURE__ */ new Map();
       if (lastStatus?.resources) {
         lastStatus.resources.forEach((r) => lastResourcesMap.set(r.name, r));
       }
-      const currentResourceNames = allResources.map((r) => r.name);
-      const missingResources = [...lastResourcesMap.values()].filter((r) => !currentResourceNames.includes(r.name));
-      const newResources = allResources.filter((r) => !lastResourcesMap.has(r.name));
-      if (missingResources.length > 0 && newResources.length > 0) {
-        const rl = import_promises.default.createInterface({ input: process.stdin, output: process.stdout });
-        console.log(import_chalk3.default.yellow("\nSe detectaron cambios en los nombres de los recursos."));
-        for (const newRes of newResources) {
-          for (const missingRes of missingResources) {
-            if (lastResourcesMap.has(missingRes.name)) {
-              const answer = await rl.question(import_chalk3.default.cyan(`\xBFEl recurso '${newRes.name}' es un renombre de '${missingRes.name}'? (y/N): `));
-              if (answer.toLowerCase() === "y") {
-                const oldData = lastResourcesMap.get(missingRes.name);
-                lastResourcesMap.set(newRes.name, { ...oldData, name: newRes.name });
-                lastResourcesMap.delete(missingRes.name);
-                newRes.previousName = missingRes.name;
-                newRes.extra = { ...newRes.extra, renamedFrom: missingRes.name };
-                console.log(import_chalk3.default.green(`\u2714 ${missingRes.name} -> ${newRes.name} (Heredando versi\xF3n v${oldData.version})`));
-                console.log(import_chalk3.default.yellow(`  \u26A0 Los contenedores de '${missingRes.name}' ser\xE1n tratados como versiones antiguas de '${newRes.name}'.`));
-                break;
-              }
-            }
-          }
-        }
-        rl.close();
-      }
-      const trulyRemovedResources = [...lastResourcesMap.keys()].filter(
-        (key) => !currentResourceNames.includes(key)
-      );
-      if (trulyRemovedResources.length > 0) {
-        console.log(import_chalk3.default.yellow("\nRecursos eliminados (no renombrados):"));
-        trulyRemovedResources.forEach((name) => console.log(import_chalk3.default.red(`  \u2022 ${name}`)));
-        const rl = import_promises.default.createInterface({ input: process.stdin, output: process.stdout });
-        const answer = await rl.question(import_chalk3.default.yellow(`\xBFDesea eliminar los contenedores e im\xE1genes de estos recursos obsoletos? (Y/n): `));
-        rl.close();
-        if (["y", "yes", ""].includes(answer.toLowerCase().trim())) {
-          for (const name of trulyRemovedResources) {
-            console.log(import_chalk3.default.blue(`Limpiando recurso eliminado: ${name}`));
-            const dummyResource = {
-              name: `${name}`,
-              fullName: `${name}-${this.stack.name}`,
-              version: "1",
-              updateStatus: async (status, log) => {
-              },
-              extra: {}
-            };
-            if (!this.logger[name]) {
-              const color = COLORS[name.length % COLORS.length];
-              this.logger[name] = createLogger(name, color);
-            }
-            await this.clean(dummyResource, 0);
-            const subdomain = dummyResource.fullName;
-            const proxy = await service.getProxy(subdomain, true);
-            await service.deleteProxy(proxy?.id);
-          }
-        }
-      }
-      for (const resource of allResources) {
-        const isTarget = targetNames.includes(resource.name);
-        if (isTarget) {
-          let nextVersion = 1;
-          if (lastResourcesMap.has(resource.name)) {
-            const lastResource = lastResourcesMap.get(resource.name);
-            nextVersion = Number(lastResource.version || 0) + 1;
-          }
-          const dockerNextVersion = await this.getNextVersion(resource.fullName);
-          nextVersion = Math.max(nextVersion, dockerNextVersion);
-          resource.version = String(nextVersion);
-          resource.status = "PENDING";
-          resourcesToDeploy.push(resource);
-          allResourcesWithStatus.push(resource);
+      const currentResourcesMap = /* @__PURE__ */ new Map();
+      resources.forEach((r) => currentResourcesMap.set(r.name, r));
+      const added = [];
+      const removed = [];
+      const updated = [];
+      for (const [name, currentResource] of currentResourcesMap.entries()) {
+        if (!lastResourcesMap.has(name)) {
+          added.push(currentResource);
         } else {
-          const lastResource = lastResourcesMap.get(resource.name);
-          resource.version = lastResource?.version || "0";
-          resource.status = "SKIPPED";
-          resource.extra = lastResource?.extra || {};
-          allResourcesWithStatus.push(resource);
-        }
-      }
-      const deploy = await service.create(this.stack.name, {
-        status: "PROCESSING",
-        resources: allResourcesWithStatus.map((r) => ({
-          name: r.name,
-          version: r.version || "1",
-          status: r.status,
-          extra: r.extra
-        }))
-      });
-      const rollbackStack = [];
-      try {
-        let aborted = false;
-        const deployPromises = resourcesToDeploy.map(async (resource, i) => {
-          const logger2 = this.logger[resource.name];
-          logger2.info(`Desplegando ${resource.fullName}`);
-          resource.updateStatus = async (status, log, extraData) => {
-            resource.status = status;
-            logger2.info(`Actualizando estado de ${resource.fullName} a ${status}` + (log ? ` con log: ${log}` : ""));
-            await service.update({
-              stackName: this.stack.name,
-              id: deploy.id,
-              resources: (deploy.resources || []).map((r) => {
-                if (r.name === resource.name) {
-                  r.status = status;
-                  if (log) r.taskLog = [...r.taskLog || [], log];
-                  if (extraData) Object.assign(r, extraData);
-                }
-                return r;
-              })
-            });
-            if (status === "ERROR" || status === "FAILED") {
-              await service.update({
-                stackName: this.stack.name,
-                id: deploy.id,
-                status
-              });
-            }
-          };
-          const namesToCheck = [resource.name];
-          if (resource.previousName) namesToCheck.push(resource.previousName);
-          const previousContainer = await this.getRunningContainer(namesToCheck);
-          rollbackStack.push(async () => {
-            logger2(import_chalk3.default.yellow(`[Rollback] Iniciando rollback para ${resource.name}...`));
-            await resource.updateStatus("ROLLBACK", "Iniciando proceso de rollback...", {
-              rollbackTarget: previousContainer ? previousContainer.Names[0] : "none"
-            });
-            const newContainerName = `/${resource.fullName}-${resource.version}`;
-            if (previousContainer && previousContainer.Names[0] === newContainerName) {
-              logger2(import_chalk3.default.red(`[Rollback] Error de seguridad: El contenedor a eliminar coincide con el anterior. Omitiendo eliminaci\xF3n.`));
-            } else {
-              try {
-                const containerToRemove = this.docker.getContainer(newContainerName.substring(1));
-                logger2(`  [Rollback] Eliminando contenedor fallido/nuevo: ${newContainerName.substring(1)}`);
-                await containerToRemove.remove({ force: true });
-              } catch (e) {
-              }
-            }
-            if (previousContainer) {
-              const prevName = previousContainer.Names[0];
-              logger2(`  [Rollback] Reiniciando contenedor anterior: ${prevName}`);
-              try {
-                const containerToRestart = this.docker.getContainer(prevName.substring(1));
-                await containerToRestart.start().catch((e) => {
-                  if (!e.message.includes("already started") && !e.message.includes("304")) throw e;
-                });
-                if (resource.extra && resource.extra.hostname) {
-                }
-              } catch (e) {
-                logger2.error(import_chalk3.default.red(`  [Rollback] Error reiniciando anterior: ${e}`));
-              }
-            }
-          });
-          await resource.updateStatus("PROCESSING");
-          if (resource.preDeploy) {
-            if (aborted) return;
-            logger2.info(`Ejecutando pre-deploy: ${resource.preDeploy}`);
-            logger2.start(`Ejecutando: ${resource.preDeploy}`);
-            try {
-              console.log(`Ejecutando pre-deploy: ${resource.preDeploy}`);
-              console.log(resource.folder);
-              const execPromise = (0, import_util.promisify)(import_child_process.exec);
-              const { stdout, stderr } = await execPromise(resource.preDeploy, { cwd: resource.folder.proyect });
-              if (stdout) logger2(import_chalk3.default.dim(stdout));
-              if (stderr) logger2.error(import_chalk3.default.yellow(stderr));
-              logger2.succeed(`Pre-deploy finalizado exitosamente.`);
-            } catch (error2) {
-              logger2.fail(`Error en pre-deploy: ${error2.message}`);
-              throw new Error(`Pre-deploy failed: ${error2.message}`);
-            }
+          const lastResource = lastResourcesMap.get(name);
+          if (lastResource.version !== currentResource.version) {
+            updated.push({ old: lastResource, new: currentResource });
           }
-          const isTask = resource.templateObj.type === "task";
-          await resource.templateObj.process(resource);
-          if (isTask) {
-            if (resource.templateObj.postProcess) {
-              await resource.templateObj.postProcess(resource);
-            }
-            logger2(`Tarea ${resource.name} completada.`);
-            return;
+        }
+      }
+      for (const [name, lastResource] of lastResourcesMap.entries()) {
+        if (!currentResourcesMap.has(name)) {
+          removed.push(lastResource);
+        }
+      }
+      if (added.length > 0) {
+        console.log(import_chalk3.default.green("  Recursos nuevos:"));
+        added.forEach((r) => console.log(import_chalk3.default.green(`    + ${r.name}`)));
+      }
+      if (removed.length > 0) {
+        console.log(import_chalk3.default.red("  Recursos eliminados:"));
+        removed.forEach((r) => console.log(import_chalk3.default.red(`    - ${r.name}`)));
+      }
+      if (updated.length > 0) {
+        console.log(import_chalk3.default.yellow("  Recursos actualizados:"));
+        updated.forEach((u) => console.log(import_chalk3.default.yellow(`    ~ ${u.new.name} (v${u.old.version || "N/A"} -> v${u.new.version || "N/A"})`)));
+      }
+      if (added.length === 0 && removed.length === 0 && updated.length === 0) {
+        console.log(import_chalk3.default.dim("  No se encontraron cambios en los recursos."));
+      }
+      if (added.length > 0 || removed.length > 0 || updated.length > 0) {
+        const rl = import_promises.default.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        });
+        // const answer = await rl.question(import_chalk3.default.yellow("\xBFDesea continuar con el despliegue? (y/N): "));
+        // rl.close();
+        // if (!["y", "yes"].includes(answer.toLowerCase())) {
+        //   spinner_default.fail("Despliegue cancelado por el usuario.");
+        //   return;
+        // }
+      }
+      for (const resource of resources) {
+        console.log(`Desplegando ${this.stack.name}-${resource.name}`);
+        resource.version = await this.getNextVersion(resource.name);
+        const isTask = resource.templateObj.type === "task";
+        await resource.templateObj.process(resource, this);
+        if (isTask) {
+          if (resource.templateObj.postProcess) {
+            await resource.templateObj.postProcess(resource, this);
           }
-          if (aborted) return;
-          resource.imageName = await this.createImage(resource);
-          if (aborted) return;
-          const namesToClean = [resource.name];
-          if (resource.previousName) namesToClean.push(resource.previousName);
-          await this.clean(resource, 5, namesToClean);
-          if (aborted) return;
-          await this.start(resource);
-          if (aborted) return;
-          await this.setProxy(resource);
-          await resource.updateStatus("SUCCESS");
-        });
-        await Promise.all(deployPromises);
-        await service.update({
-          stackName: this.stack.name,
-          id: deploy.id,
-          status: "SUCCESS"
-        });
-        console.log("Despliegue completado y estado guardado.");
-        this.printSummary(allResourcesWithStatus, "SUCCESS");
-      } catch (error2) {
-        console.error(import_chalk3.default.red("\nDeployment failed. Initiating rollback..."));
-        spinner_default.fail("Deployment failed.");
-        for (const rollbackAction of rollbackStack.reverse()) {
-          await rollbackAction();
+          console.log(`Tarea ${resource.name} completada.`);
+          continue;
         }
-        await service.update({
-          stackName: this.stack.name,
-          id: deploy.id,
-          status: "FAILED"
-        });
-        this.printSummary(allResourcesWithStatus, "FAILED");
-        process.exit(1);
+        resource.imageName = await this.createImage(resource);
+        await this.clean(resource.name);
+        await this.start(resource);
       }
-    };
-    this.setProxy = async (resource) => {
-      const service = this.stack.getService();
-      const subdomain = resource.fullName;
-      const target = resource.extra.hostname;
-      const proxy = await service.getProxy(subdomain, true);
-      if (!proxy) {
-        await service.addProxy(subdomain, target);
-        await resource.updateStatus("PROCESSING", `PROXY: Proxy '${subdomain}' agregado exitosamente.`);
-      } else if (proxy.subdomain == subdomain && proxy.target == target) {
-        await resource.updateStatus("PROCESSING", `PROXY: Proxy '${subdomain}' no se modifico.`);
-      } else if (proxy.subdomain == subdomain && proxy.target != target) {
-        await service.updateProxy(proxy.id, subdomain, target);
-        await resource.updateStatus("PROCESSING", `PROXY: Proxy '${subdomain}' actualizado exitosamente.`);
-      }
-      resource.extra ||= {};
-      resource.extra.proxy = (await service.getProxy(subdomain, true))?.url;
-    };
-    this.printSummary = (resources, globalStatus) => {
-      console.log(import_chalk3.default.bold(`
-Deployment Summary (${globalStatus}):`));
-      const table = new import_cli_table3.default({
-        head: [import_chalk3.default.cyan("Resource"), import_chalk3.default.cyan("Version"), import_chalk3.default.cyan("Status"), import_chalk3.default.cyan("URL")],
-        colWidths: [30, 15, 20]
-      });
-      resources.forEach((r) => {
-        let statusColor = import_chalk3.default.white;
-        let statusText = r.status || "PENDING";
-        if (statusText === "SUCCESS") statusColor = import_chalk3.default.green;
-        else if (statusText === "FAILED" || statusText === "ERROR") statusColor = import_chalk3.default.red;
-        else if (statusText === "ROLLBACK") statusColor = import_chalk3.default.yellow;
-        else if (statusText === "PROCESSING") statusColor = import_chalk3.default.blue;
-        else if (statusText === "SKIPPED") statusColor = import_chalk3.default.gray;
-        let nameDisplay = r.name;
-        if (r.extra?.renamedFrom) {
-          nameDisplay += import_chalk3.default.dim(` (was ${r.extra.renamedFrom})`);
-        }
-        table.push([nameDisplay, r.version || "-", statusColor(statusText), r.extra?.proxy || r.extra?.hostname || "-"]);
-      });
-      console.log(table.toString());
-    };
-    this.getStackContainers = async (all = true) => {
-      const filters = {
-        label: ["oton-pilot-cli"]
-      };
-      const containers = await this.docker.listContainers({
-        all,
-        filters: JSON.stringify(filters)
-      });
-      return containers.filter((container) => {
-        return container.Labels && Object.entries(container.Labels).find(([k, v]) => k == "stack" && v == this.stack.name);
-      });
-    };
-    this.createContainerTable = async (containers) => {
-      const service = this.stack.getService();
-      const table = new import_cli_table3.default({
-        head: [
-          import_chalk3.default.cyan("ID"),
-          import_chalk3.default.cyan("Nombre"),
-          import_chalk3.default.cyan("Imagen"),
-          import_chalk3.default.cyan("Estado"),
-          import_chalk3.default.cyan("Status"),
-          import_chalk3.default.cyan("Networks"),
-          import_chalk3.default.cyan("Url Proxy")
-        ]
-      });
-      for (const c of containers) {
-        const fullName = String(c.Image.split(":").at(0));
-        const proxy = await service.getProxy(fullName, true);
-        table.push([
-          c.Id.substring(0, 12),
-          fullName,
-          c.Image,
-          c.State,
-          c.Status,
-          Object.keys(c.NetworkSettings.Networks).join(),
-          proxy?.url || "-"
-        ]);
-      }
-      return table;
+      console.log("Despliegue completado y estado guardado.");
     };
     this.ps = async (options) => {
       try {
-        const containers = await this.getStackContainers(options.all);
+        const filters = {
+          label: [
+            "deploy-in-docker"
+          ]
+        };
+        const containers = (await this.docker.listContainers({
+          all: options.all,
+          filters: JSON.stringify(filters)
+        })).filter((container) => {
+          return container.Labels && Object.entries(container.Labels).find(([k, v]) => k == "stack" && v == this.stack.name);
+        });
         if (containers.length === 0) {
           console.log(import_chalk3.default.yellow("No se encontraron contenedores."));
           return;
         }
-        const table = await this.createContainerTable(containers);
+        const table = new import_cli_table3.default({
+          head: [
+            import_chalk3.default.cyan("ID"),
+            import_chalk3.default.cyan("Nombre"),
+            import_chalk3.default.cyan("Imagen"),
+            import_chalk3.default.cyan("Estado"),
+            import_chalk3.default.cyan("Status"),
+            import_chalk3.default.cyan("Networks"),
+            import_chalk3.default.cyan("PrivatePorts")
+          ]
+        });
+        containers.forEach((c) => {
+          table.push([
+            c.Id.substring(0, 12),
+            c.Names.map((n) => n.replace("/", "")).join(", "),
+            c.Image,
+            c.State,
+            c.Status,
+            Object.keys(containers[0].NetworkSettings.Networks).join(),
+            Object.values(c.Ports).reduce((acc, portInfo) => !acc.includes(portInfo.PrivatePort) ? [...acc, portInfo.PrivatePort] : [...acc], []).join(", ")
+          ]);
+        });
         console.log(table.toString());
       } catch (error2) {
         handleError(error2);
       }
     };
-    this.followStackLogs = async (tail, specificResources, all) => {
+    this.followStackLogs = async (tail, specificContainers) => {
       const activeStreams = [];
       const cleanupStreams = [];
       const cleanup = () => {
@@ -75869,16 +75422,23 @@ Deployment Summary (${globalStatus}):`));
       process.on("SIGINT", cleanup);
       try {
         console.log(import_chalk3.default.blue(`Buscando contenedores gestionados en '${this.stack.name}'...`));
-        const allContainers = await this.getStackContainers(!!specificResources?.at(0));
+        const allContainers = await this.docker.listContainers({
+          all: !!specificContainers?.at(0),
+          filters: JSON.stringify({
+            label: [
+              "deploy-in-docker"
+            ]
+          })
+        });
         let containersToShow = allContainers;
-        if (specificResources && specificResources.length > 0) {
-          console.log(import_chalk3.default.blue(`Filtrando por: ${specificResources.join(", ")}`));
+        if (specificContainers && specificContainers.length > 0) {
+          console.log(import_chalk3.default.blue(`Filtrando por: ${specificContainers.join(", ")}`));
           containersToShow = allContainers.filter((c) => {
             const shortId = c.Id.substring(0, 12);
             const names = c.Names.map((n) => n.replace("/", "").split("-").at(0));
             const baseName = c.Names.map((n) => n.replace("/", ""));
-            return specificResources.some(
-              (requested) => baseName.some((name) => name.startsWith(requested)) && (all || c.State === "running")
+            return specificContainers.some(
+              (requested) => shortId === requested || names.includes(requested) || baseName.includes(requested)
             );
           });
           if (containersToShow.length === 0) {
@@ -75894,7 +75454,7 @@ Deployment Summary (${globalStatus}):`));
         console.log(import_chalk3.default.dim("---"));
         containersToShow.forEach(async (containerInfo, index) => {
           const containerIdShort = containerInfo.Id.substring(0, 12);
-          let containerName = containerInfo.Names.map((n) => n.replace("/", "")).join(",") || containerIdShort;
+          let containerName = containerInfo.Names.map((n) => n.replace("/", "").split("-").at(0)).join(",") || containerIdShort;
           let color = COLORS[index % COLORS.length];
           let prefix2 = color(`[${containerName}] `);
           if (containerInfo.State !== "running") {
@@ -75961,22 +75521,19 @@ Stream de logs para ${containerName} finalizado.`));
         cleanup();
       }
     };
-    this.showStackLogs = async (tailCount, specificResources, all) => {
+    this.showStackLogs = async (tailCount) => {
       try {
         if (isNaN(tailCount) || tailCount <= 0) {
           handleError(new Error("--tail debe ser un n\xFAmero positivo."));
           return;
         }
-        console.log(import_chalk3.default.blue(`Buscando contenedores gestionados por 'oton-pilot' en '${this.stack.name}' para obtener logs...`));
-        const managedContainers = (await this.getStackContainers(true)).filter((containerInfo) => {
-          if (specificResources && !specificResources.some(
-            (requested) => containerInfo.Names.some((name) => name.startsWith("/" + requested))
-          )) return false;
-          if (!all && containerInfo.State !== "running") return false;
-          return true;
-        });
+        console.log(import_chalk3.default.blue(`Buscando contenedores gestionados por 'did' en '${this.stack.name}' para obtener logs...`));
+        const allContainers = await this.docker.listContainers({ all: true });
+        const managedContainers = allContainers.filter(
+          (container) => container.Labels && (container.Labels.hasOwnProperty("did") || container.Labels.hasOwnProperty("deploy-in-docker"))
+        );
         if (managedContainers.length === 0) {
-          console.log(import_chalk3.default.yellow(`No se encontraron contenedores gestionados por 'oton-pilot' en '${this.stack.name}'.`));
+          console.log(import_chalk3.default.yellow(`No se encontraron contenedores gestionados por 'did' en '${this.stack.name}'.`));
           return;
         }
         console.log(import_chalk3.default.blue(`Obteniendo las \xFAltimas ${tailCount} l\xEDneas de logs para ${managedContainers.length} contenedor(es)...`));
@@ -76010,17 +75567,46 @@ Stream de logs para ${containerName} finalizado.`));
     };
     this.removeStack = async () => {
       const rl = import_promises.default.createInterface({ input: process.stdin, output: process.stdout });
-      const service = this.stack.service;
       try {
-        console.log(import_chalk3.default.yellow(`Searching for containers managed by 'oton-pilot' on '${this.stack.name}' to remove...`));
-        const containers = await this.getStackContainers(true);
+        console.log(import_chalk3.default.yellow(`Searching for containers managed by 'did' on '${this.stack.name}' to remove...`));
+        const containers = (await this.docker.listContainers({
+          all: true,
+          filters: JSON.stringify({
+            label: [
+              "deploy-in-docker"
+            ]
+          })
+        }) || []).filter((container) => {
+          return container.Labels && Object.entries(container.Labels).find(([k, v]) => k == "stack" && v == this.stack.name);
+        });
         if (containers.length === 0) {
-          console.log(import_chalk3.default.green(`No containers managed by 'oton-pilot' found on '${this.stack.name}'. Nothing to do.`));
+          console.log(import_chalk3.default.green(`No containers managed by 'did' found on '${this.stack.name}'. Nothing to do.`));
           return;
         }
         console.log(import_chalk3.default.red.bold(`
 WARNING! The following ${containers.length} containers on '${this.stack.name}' will be stopped and permanently removed:`));
-        const table = await this.createContainerTable(containers);
+        const table = new import_cli_table3.default({
+          head: [
+            import_chalk3.default.cyan("ID"),
+            import_chalk3.default.cyan("Nombre"),
+            import_chalk3.default.cyan("Imagen"),
+            import_chalk3.default.cyan("Estado"),
+            import_chalk3.default.cyan("Status"),
+            import_chalk3.default.cyan("Networks"),
+            import_chalk3.default.cyan("Ports")
+          ]
+        });
+        containers.forEach((c) => {
+          table.push([
+            c.Id.substring(0, 12),
+            c.Names.map((n) => n.replace("/", "")).join(", "),
+            c.Image,
+            c.State,
+            c.Status,
+            Object.keys(containers[0].NetworkSettings.Networks).join(),
+            Object.values(c.Ports).reduce((acc, portInfo) => !acc.includes(portInfo.PrivatePort) ? [...acc, portInfo.PrivatePort] : [...acc], []).join(", ")
+          ]);
+        });
         console.log(table.toString());
         const answer = await rl.question(import_chalk3.default.red("\nAre you sure you want to continue? (y/N): "));
         if (answer.toLowerCase() !== "y") {
@@ -76050,14 +75636,6 @@ Proceeding to stop and remove ${containers.length} containers...`));
             const image = this.docker.getImage(containerInfo.Image);
             process.stdout.write(import_chalk3.default.dim("Removing Image... "));
             await image.remove({ force: true });
-            process.stdout.write(import_chalk3.default.dim("Removing Proxies... "));
-            for (const str2 of containerInfo.Names) {
-              const subdomain = str2.substring(0, str2.lastIndexOf("-")).replace("/", "");
-              const proxys = await service.getProxy(subdomain);
-              for (const proxy of proxys) {
-                await service.deleteProxy(proxy.id);
-              }
-            }
             console.log(import_chalk3.default.green("OK."));
             successCount++;
           } catch (containerError) {
@@ -76078,51 +75656,31 @@ Finished removing containers.`));
         rl.close();
       }
     };
-    this.getRunningContainer = async (resourceNames) => {
-      const containers = await this.getStackContainers(true);
-      const matchingContainers = containers.filter((c) => {
-        for (const resName of resourceNames) {
-          const prefix2 = `/${resName}-`;
-          if (c.Names[0].startsWith(prefix2)) return true;
-        }
-        return false;
-      });
-      const running = matchingContainers.filter((c) => c.State === "running");
-      running.sort((a, b) => b.Created - a.Created);
-      return running.at(0);
-    };
     this.start = async (resource) => {
-      const logger2 = this.logger[resource.name];
       try {
-        const { imageName, spec, fullName, name, version: version2, environment, templateObj } = resource;
-        logger2.info(`Iniciando contenedor '${fullName}' con la image '${imageName}'...`);
-        const profile = this.stack.getProfile();
+        const { imageName, spec, name, version: version2, environment, templateObj } = resource;
+        console.log({ spec });
+        console.log(import_chalk3.default.blue(`Iniciando contenedor '${name}' con la image '${imageName}'...`));
         spec.networks ||= [];
-        resource.proxy && spec.networks.push(profile.service?.network || "oton-pilot-proxy");
         if (spec.networks.at(0)) {
           for (const networkName of spec.networks) {
-            await this.ensureNetworkExists(networkName, logger2);
+            await this.ensureNetworkExists(networkName);
           }
         }
         environment.PORT ||= spec.port;
-        resource.extra = {
-          ...resource.extra,
-          hostname: spec.hostname || `${name}.${this.stack.name}`.toLowerCase()
-        };
-        let containerName = fullName;
+        let containerName = name;
         if (version2) containerName += `-${version2}`;
         const container = await this.docker.createContainer({
           Image: imageName,
           name: containerName,
           Env: this.formatEnvironment(environment),
-          Hostname: resource.extra?.hostname,
+          Hostname: spec.hostname || `${this.stack.name}.${name}`.toLowerCase(),
           ExposedPorts: spec.port ? {
             [`${spec.port}/tcp`]: {}
           } : {},
           Labels: {
             ...spec.label,
-            "oton-pilot-cli": "0.0.1",
-            "oton-pilot-service": "0.0.1",
+            "deploy-in-docker": "0.0.0",
             "stack": resource.stack || this.stack.name,
             "com.docker.compose.project": resource.stack || this.stack.name
           },
@@ -76147,13 +75705,11 @@ Finished removing containers.`));
         for (const networkName of spec.networks) {
           const network = this.docker.getNetwork(networkName);
           await network.connect({ Container: container.id });
-          logger2.succeed(`Contenedor '${container.id.substring(0, 12)}' conectado a la red '${networkName}'.`);
+          spinner_default.succeed(`Contenedor '${container.id.substring(0, 12)}' conectado a la red '${networkName}'.`);
         }
         await container.start();
-        logger2.succeed(`Contenedor '${imageName}' iniciado exitosamente.`);
-        await resource.updateStatus("PROCESSING", `STARTED: Contenedor '${imageName}' iniciado exitosamente.`);
+        console.log(import_chalk3.default.green(`Contenedor '${imageName}' iniciado exitosamente.`));
       } catch (error2) {
-        await resource.updateStatus("ERROR", `STARTED: ${error2.message}`);
         handleError(error2);
       }
     };
@@ -76163,23 +75719,25 @@ Finished removing containers.`));
       }
       return Object.entries(envObject).map(([key, value]) => `${key}=${value}`);
     };
-    this.getNextVersion = async (containerNamePrefix) => {
+    this.getNextVersion = async (name) => {
+      console.log(`\u2139\uFE0F  Obteniendo siguiente version para el despliegue`);
+      spinner_default.start(`Buscando ultima versiones de '${name}'`);
       let last = 0;
-      const containers = await this.docker.listContainers({ all: true, filters: { name: [`^/${containerNamePrefix}.*`] } });
+      const containers = await this.docker.listContainers({ all: true, filters: { name: [`^/${name}.*`] } });
       if (!containers.at(0)) {
-        return 1;
+        spinner_default.succeed(" -> No se encontraron otras versiones.");
+        return last;
       }
       for (const container of containers) {
-        const name = container.Names[0];
-        const parts = name.replace("/", "").split("-");
-        const v = Number(parts[parts.length - 1]);
-        if (!isNaN(v) && v > last) last = v;
+        const containerName = container.Names.at(0);
+        const v = Number(containerName?.split("-").at(1));
+        if (v > last) last = v;
       }
+      spinner_default.succeed(`Ultima version encontrada ${last}`);
       return last + 1;
     };
     this.createImage = async (resource, imageName) => {
-      const logger2 = this.logger[resource.name];
-      logger2.info(`Creando nueva imagen para el despliegue`);
+      console.log(`\u2139\uFE0F  Creando nueva imagen para el despliegue`);
       const { templateObj } = resource;
       let dockerFile = templateObj.dockerfileTemplate;
       for (const str2 of ["handler", "port", "imageName"]) {
@@ -76188,33 +75746,34 @@ Finished removing containers.`));
           resource.props[str2] && (dockerFile = dockerFile.replaceAll(`{${str2}}`, resource.props[str2]));
         }
       }
-      import_fs6.default.writeFileSync(import_path7.default.join(resource.folder.deploy, "Dockerfile"), dockerFile);
-      imageName ||= `${resource.fullName}:${resource.version}`.toLowerCase();
+      import_fs4.default.writeFileSync(import_path5.default.join(resource.folder.deploy, "Dockerfile"), dockerFile);
+      console.log("---");
+      imageName ||= `${this.stack.name}-${resource.name}:${resource.version}`.toLowerCase();
       const options = {
         t: imageName,
         dockerfile: "Dockerfile",
         labels: { "oton-pilot": "0.0.0" },
-        forcerm: true,
-        nocache: true
-        // Forzamos rebuild sin cache
+        forcerm: true
       };
-      this.copyDirectoryRecursive(resource.folder.code, resource.folder.deploy, logger2);
+      if (resource.codeUri) {
+        this.copyDirectoryRecursive(resource.folder.code, resource.folder.deploy);
+      }
       const pack2 = tar.pack(resource.folder.deploy, {
         map: (header) => {
           if (header.name === "Dockerfile") {
             return header;
           }
-          header.name = import_path7.default.join("app", header.name);
+          header.name = import_path5.default.join("app", header.name);
           return header;
         }
       });
-      logger2.start("Compilando imagen de Docker");
+      spinner_default.start("Compilando imagen de Docker");
       try {
         const stream = await this.docker.buildImage(pack2, options);
         const res = await new Promise((resolve, reject) => {
           this.docker.modem.followProgress(stream, (err, res2) => {
             if (err) {
-              logger2.error(String(err));
+              console.log(err);
               return reject(err);
             }
             resolve(res2);
@@ -76223,203 +75782,173 @@ Finished removing containers.`));
         if (res.find((i) => i.error)) {
           for (const e of res) {
             if (e.stream == "\n" || typeof e.stream !== "string") continue;
-            logger2.succeed(e.stream.replaceAll("\n", ""));
+            spinner_default.succeed(e.stream.replaceAll("\n", ""));
           }
           handleError(res.find((i) => i.error).error);
         }
-        logger2.succeed(`Imagen '${imageName}' compilada exitosamente.`);
-        await resource.updateStatus("PROCESSING", `COMPILED: Imagen '${imageName}' compilada exitosamente.`);
+        spinner_default.succeed(`Imagen '${imageName}' compilada exitosamente.`);
         return imageName;
       } catch (err) {
         const error2 = err;
-        await resource.updateStatus("ERROR", `COMPILED: Error al compilar la imagen: ${error2.message}`);
         handleError(`Error al compilar la imagen: ${error2.message}`);
         return "";
       }
     };
-    this.clean = async (resource, containersToKeep = 5, resourceNames = [resource.name]) => {
-      const logger2 = this.logger[resource.name];
-      logger2.info(`Obteniendo contenedores para limpieza (Nombres: ${resourceNames.join(", ")})`);
+    this.clean = async (name, containersToKeep = 5) => {
+      console.log(`\u2139\uFE0F  Obteniendo contenedores para limpieza `);
+      spinner_default.succeed(`Buscando contenedores con prefijo '${name}' para limpiar...`);
+      const filtros = { name: [`^/${name}-.*`] };
       try {
-        const allContainers = await this.getStackContainers(true);
-        const prefix2 = `/${resource.fullName}-`;
-        const matchingContainers = allContainers.filter((c) => c.Names[0].startsWith(prefix2));
-        if (!matchingContainers.at(0)) {
-          logger2.info(`No se encontraron contenedores para limpiar.`);
+        const containers = await this.docker.listContainers({ all: true, filters: filtros });
+        if (!containers.at(0)) {
+          spinner_default.info(`No se encontraron contenedores que coincidan con el nombre '${name}'.`);
           return;
         }
-        logger2.info(`Deteniendo contenedores en ejecuci\xF3n`);
-        for (const containerInfo of matchingContainers) {
+        console.log(`\u2139\uFE0F  Deteniendo contenedores en ejecuci\xF3n`);
+        for (const containerInfo of containers) {
           const containerId = containerInfo.Id;
-          const name = containerInfo.Names[0].substring(1);
+          const name2 = containerInfo.Names[0].substring(1);
           const container = this.docker.getContainer(containerId);
           if (containerInfo.State === "running") {
-            logger2.start(`Deteniendo contenedor: ${name} (${containerId})`);
+            spinner_default.start(`Deteniendo contenedor: ${name2} (${containerId})`);
             await container.stop();
-            logger2.succeed(`Contenedor ${name} (${containerId}) detenido exitosamente`);
+            spinner_default.succeed(`Contenedor ${name2} (${containerId}) detenido exitosamente`);
           }
         }
-        matchingContainers.sort((a, b) => b.Created - a.Created);
-        const containersToRemove = matchingContainers.slice(containersToKeep);
+        containers.sort((a, b) => b.Created - a.Created);
+        const containersToRemove = containers.slice(5 - 1);
         if (!containersToRemove.at(0)) {
-          logger2.succeed(import_chalk3.default.green(`No hay suficientes contenedores para eliminar. Se conservan los ${containersToKeep} m\xE1s recientes.`));
+          spinner_default.succeed(import_chalk3.default.green(`No hay suficientes contenedores para eliminar. Se conservan los ${containersToKeep} m\xE1s recientes.`));
           return;
         }
-        logger2.succeed(`Se encontraron ${matchingContainers.length} contenedores. Eliminando ${containersToRemove.length} m\xE1s antiguos...`);
+        spinner_default.succeed(`Se encontraron ${containers.length} contenedores. Eliminando ${containersToRemove.length} m\xE1s antiguos...`);
         for (const containerInfo of containersToRemove) {
           const containerId = containerInfo.Id;
-          const name = containerInfo.Names[0].substring(1);
+          const name2 = containerInfo.Names[0].substring(1);
           const container = this.docker.getContainer(containerId);
-          logger2.change(`Eliminando contenedor: ${name} (${containerId.substring(0, 12)})`);
+          spinner_default.change(`Eliminando contenedor: ${name2} (${containerId.substring(0, 12)})`);
           await container.remove({ force: true });
           const image = this.docker.getImage(containerInfo.Image);
-          try {
-            await image.remove({ force: true });
-            logger2.succeed(`imagen ${name} (${containerId.substring(0, 12)}) eliminada exitosamente`);
-          } catch (e) {
-          }
+          await image.remove({ force: true });
         }
-        const msg = `Proceso completado. Se eliminaron ${containersToRemove.length} contenedores.`;
-        logger2.succeed(import_chalk3.default.green(msg));
-        resource.updateStatus("PROCESSING", `CLEANUP: ${msg}`);
-        return true;
+        spinner_default.succeed(import_chalk3.default.green(`Proceso completado. Se eliminaron ${containersToRemove.length} contenedores.`));
       } catch (err) {
-        logger2.fail(import_chalk3.default.red(`Ocurri\xF3 un error al limpiar los contenedores: ${err}`));
+        spinner_default.fail(import_chalk3.default.red(`Ocurri\xF3 un error al limpiar los contenedores: ${err}`));
         console.error(err);
-        resource.updateStatus("ERROR", `CLEANUP: Ocurri\xF3 un error al limpiar los contenedores: ${String(err)}`);
-        return false;
       }
       return true;
     };
-    this.ensureNetworkExists = async (networkName, logger2) => {
+    this.ensureNetworkExists = async (networkName) => {
       try {
         const networks = await this.docker.listNetworks({
           filters: { name: [networkName] }
         });
         if (networks.length === 0) {
-          logger2.fail(`Red '${import_chalk3.default.cyan(networkName)}' no encontrada. Cre\xE1ndola...`);
+          spinner_default.fail(`Red '${import_chalk3.default.cyan(networkName)}' no encontrada. Cre\xE1ndola...`);
           await this.docker.createNetwork({
             Name: networkName,
             CheckDuplicate: true
             // Prevenir errores si otra red con el mismo nombre es creada simultáneamente
           });
-          logger2.succeed(import_chalk3.default.green(`Red '${import_chalk3.default.cyan(networkName)}' creada.`));
+          spinner_default.succeed(import_chalk3.default.green(`Red '${import_chalk3.default.cyan(networkName)}' creada.`));
         } else {
-          logger2.info(`Red '${import_chalk3.default.cyan(networkName)}' ya existe.`);
+          spinner_default.info(`Red '${import_chalk3.default.cyan(networkName)}' ya existe.`);
         }
       } catch (err) {
-        logger2.fail(import_chalk3.default.red(`Error al verificar/crear la red '${networkName}': ${err.message}`));
+        spinner_default.fail(import_chalk3.default.red(`Error al verificar/crear la red '${networkName}': ${err.message}`));
         throw err;
       }
     };
-    this.copyDirectoryRecursive = (source, destination, logger2) => {
+    this.copyDirectoryRecursive = (source, destination) => {
       try {
-        logger2?.start("copiando archivos");
-        if (!import_fs6.default.existsSync(destination)) {
-          import_fs6.default.mkdirSync(destination, { recursive: true });
-          logger2?.log(import_chalk3.default.dim(`  Directorio creado: ${destination}`));
+        spinner_default.start("copiando archivos");
+        if (!import_fs4.default.existsSync(destination)) {
+          import_fs4.default.mkdirSync(destination, { recursive: true });
+          console.log(import_chalk3.default.dim(`  Directorio creado: ${destination}`));
         }
-        const items = import_fs6.default.readdirSync(source);
+        const items = import_fs4.default.readdirSync(source);
         items.forEach((item) => {
-          const sourcePath = import_path7.default.join(source, item);
-          const destinationPath = import_path7.default.join(destination, item);
-          const stats = import_fs6.default.statSync(sourcePath);
+          const sourcePath = import_path5.default.join(source, item);
+          const destinationPath = import_path5.default.join(destination, item);
+          const stats = import_fs4.default.statSync(sourcePath);
           if (stats.isDirectory()) {
-            logger2?.succeed(`Copiando directorio ${sourcePath}`);
-            this.copyDirectoryRecursive(sourcePath, destinationPath, logger2);
+            spinner_default.succeed(`Copiando directorio ${sourcePath}`);
+            this.copyDirectoryRecursive(sourcePath, destinationPath);
           } else if (stats.isFile()) {
-            import_fs6.default.copyFileSync(sourcePath, destinationPath);
-            logger2?.succeed(`Archivo copiado ${sourcePath}`);
+            import_fs4.default.copyFileSync(sourcePath, destinationPath);
+            spinner_default.succeed(`Archivo copiado ${sourcePath}`);
           }
         });
       } catch (error2) {
         throw new Error(`Error copiando ${source} a ${destination}: ${error2.message}`);
       }
     };
-    this.ensurePilotService = async () => {
-      const serviceName = "oton-pilot-service";
-      const template = this.stack.templates.getTemplete("service");
-      const service = this.profile.service;
-      const logger2 = this.logger[serviceName];
-      const deployFolder = import_path7.default.join(this.stack.projectPath, ".deploy", serviceName);
-      if (!import_fs6.default.existsSync(deployFolder)) {
-        import_fs6.default.mkdirSync(deployFolder, { recursive: true });
-      }
-      const resource = {
-        name: serviceName,
-        fullName: serviceName,
-        version: "1",
-        template: "service",
-        templateObj: template,
-        environment: {
-          HOST: service?.proxyHost || this.profile.host + ":" + (service?.port || 3e3),
-          PORT: service?.port || 3e3,
-          DB_PATH: "./oton-pilot-service.db"
-        },
-        spec: { port: service?.port || 3e3, networks: [service?.network || "oton-pilot-proxy"] },
-        props: {},
-        folder: {
-          deploy: deployFolder,
-          proyect: this.stack.projectPath,
-          code: ""
-        },
-        extra: {},
-        handler: "server.min.js",
-        codeUri: "",
-        path: "",
-        updateStatus: async (status, log) => logger2.info(`${status}: ${log || ""}`)
-      };
-      try {
-        logger2.info("Verificando servicio oton-pilot-service...");
-        const prefix2 = `/${resource.fullName}`;
-        const containers = await this.docker.listContainers({
-          all: true,
-          filters: { name: [`^${prefix2}`] }
-        });
-        const runningContainer = containers.find((c) => ["running", "restarting"].includes(c.State));
-        if (runningContainer) {
-          logger2.info(import_chalk3.default.yellow(`Service already installed and running: ${runningContainer.Names[0]}`));
-          await resource.updateStatus("SKIPPED", `Service is already running (${runningContainer.Names[0]})`);
-          return true;
-        }
-        await resource.updateStatus("PROCESSING", "Installing service...");
-        await template.process(resource);
-        resource.imageName = await this.createImage(resource);
-        await this.clean(resource, 5);
-        await this.start(resource);
-        await resource.updateStatus("SUCCESS", "Service installed successfully.");
-        await resource.updateStatus("PROCESSING", "Waiting for service API to be ready...");
-        import_fs6.default.rmSync(deployFolder, { recursive: true, force: true });
-        const service2 = this.stack.getService();
-        for (let i = 0; i < 3; i++) {
-          await new Promise((resolve) => setTimeout(resolve, 5e3));
-          const isRunning = await service2.isServiceRunning();
-          if (isRunning) {
-            await resource.updateStatus("SUCCESS", "Service API is ready.");
-            return true;
-          }
-          logger2.warn(`Intento ${i + 1}/3: El servicio a\xFAn no est\xE1 listo. Reintentando...`);
-        }
-        await resource.updateStatus("ERROR", "Service API is not ready.");
-        return false;
-      } catch (error2) {
-        logger2.error(`Error asegurando el servicio piloto: ${error2.message}`);
-        throw error2;
-      }
-    };
-    this.profile = stack.profile;
+    this.profile = stack.getProfile();
     this.stack = stack;
     this.docker = new import_dockerode.default(this.profile.protocol == "local" ? void 0 : this.profile);
-    this.logger = new Proxy({}, {
-      get: (target, prop) => {
-        if (prop === "then") return void 0;
-        if (!target[prop]) {
-          const color = COLORS[Object.keys(target).length % COLORS.length];
-          target[prop] = createLogger(prop, color);
-        }
-        return target[prop];
+  }
+  async getLocalDbStatus() {
+    const containerName = "oton-pilot-db";
+    try {
+      const containers = await this.docker.listContainers({ all: true });
+      const existingContainer = containers.find((c) => c.Names.includes(`/${containerName}`));
+      if (existingContainer) {
+        return {
+          exists: true,
+          state: existingContainer.State,
+          image: existingContainer.Image
+        };
       }
-    });
+      return { exists: false };
+    } catch (error2) {
+      return { exists: false };
+    }
+  }
+  async createLocalDbContainer(credentials) {
+    spinner_default.start("Preparando especificaci\xF3n del contenedor de la base de datos...");
+    const name = "oton-pilot-db";
+    const resource = {
+      name,
+      stack: "oton",
+      template: "mongodb",
+      props: {
+        // mongo: {
+        //     username: credentials.user,
+        //     password: credentials.pass,
+        //     database: name
+        // },
+        /*  keys: [{ TODO: esto al ser tipo mongodb debe permitir agregar colecciones y dentro sus keys
+             name: "name",
+             unique: true
+         }] */
+      },
+      spec: {
+        port: credentials.port
+      },
+      folder: {
+        deploy: import_path5.default.join(process.cwd(), ".deploy", name),
+        proyect: "",
+        code: ""
+      },
+      environment: {
+        MONGO_INITDB_ROOT_USERNAME: credentials.username,
+        MONGO_INITDB_ROOT_PASSWORD: credentials.password
+      },
+      templateObj: new templates_default().getTemplete("mongodb"),
+      handler: "",
+      codeUri: "",
+      path: ""
+    };
+    if (!import_fs4.default.existsSync(resource.folder.deploy)) {
+      import_fs4.default.mkdirSync(resource.folder.deploy, { recursive: true });
+      console.log(import_chalk3.default.dim(`  Directorio creado: ${resource.folder.deploy}`));
+    }
+    resource.templateObj.process(resource);
+    resource.templateObj.volume = resource.templateObj.volume?.replace("{volumeName}", name);
+    spinner_default.succeed("Especificaci\xF3n del contenedor preparada.");
+    resource.imageName = await this.createImage(resource, name);
+    console.log(resource.imageName);
+    await this.start(resource);
   }
 };
 
@@ -76439,15 +75968,15 @@ Ejemplos de uso:
   $ oton-pilot logs -f -c my-container`);
 var globalOptions = program2.opts();
 var getInterface = async () => {
-  console.log("obteniendo interface...");
   const stack = new FileStack(globalOptions);
+  if (!await stack.getService().isServiceRunning()) {
+  }
   const profile = stack.getProfile();
-  const Manage = manages_default[profile.mode];
-  if (!Manage) {
+  const manage = manages_default[profile.mode];
+  if (!manage) {
     return handleError(`Error al obtener manage: ${profile.mode}`);
   }
-  const manage = new Manage(stack);
-  return await manage.ensurePilotService() ? manage : handleError("Error asegurando el servicio piloto.");
+  return new manage(stack);
 };
 var dbCommand = new Command("db").description("Gestiona la base de datos de estado local de oton-pilot.");
 dbCommand.command("create").description("Crea una nueva instancia local de la base de datos en Docker si no existe.").option("-p, --port <number>", "Port.").action(async (options) => {
@@ -76484,7 +76013,6 @@ dbCommand.command("create").description("Crea una nueva instancia local de la ba
 program2.addCommand(dbCommand);
 program2.command("deploy").description("Construye y despliega los servicios definidos en el stack.").option("-r, --resource <name...>", "Nombre(s) de los recursos espec\xEDficos a desplegar.").action(async (options) => {
   try {
-    console.log("deploying...");
     const instance = await getInterface();
     await instance.deploy(options.resource);
   } catch (error2) {
@@ -76499,12 +76027,7 @@ program2.command("config").description("Muestra la configuraci\xF3n del stack qu
   try {
     const stack = new FileStack(globalOptions);
     console.log(import_chalk4.default.green("\xA1Archivo de configuraci\xF3n cargado!"));
-    const output = {
-      name: stack.name,
-      profile: stack.getProfile(),
-      resources: stack.getResources()
-    };
-    console.log(JSON.stringify(output, null, 2));
+    console.log(JSON.stringify(stack.config, null, 2));
   } catch (error2) {
     handleError(error2);
   }
@@ -76520,23 +76043,19 @@ program2.command("remove").alias("rm").description("Detiene y elimina los conten
   const instance = await getInterface();
   await instance.removeStack();
 });
-program2.command("logs").description("Muestra los logs de los contenedores del stack.").option("-t, --tail <number>", "N\xFAmero de l\xEDneas a mostrar desde el final de los logs.", "100").option("-fl, --follow", "Seguir la salida de los logs en tiempo real.", false).option("-r, --resource <name...>", "Nombre(s) de los recursos espec\xEDficos.").option("-a, --all", "Mostrar todos los contenedores (en ejecuci\xF3n y detenidos).", false).action(async (options) => {
+program2.command("logs").description("Muestra los logs de los contenedores del stack.").option("-t, --tail <number>", "N\xFAmero de l\xEDneas a mostrar desde el final de los logs.", "100").option("-f, --follow", "Seguir la salida de los logs en tiempo real.", false).option("-c, --container <name_or_id...>", "Nombre(s) o ID(s) de contenedores espec\xEDficos.").action(async (options) => {
   const instance = await getInterface();
   const tailCount = parseInt(options.tail, 10);
   if (isNaN(tailCount) || tailCount <= 0) {
     handleError(new Error("--tail debe ser un n\xFAmero positivo."));
     return;
   }
-  if (options.follow) {
-    await instance.followStackLogs(tailCount, options.resource, options.all);
-  } else {
-    await instance.showStackLogs(tailCount, options.resource, options.all);
-  }
+  await options.follow ? instance.followStackLogs(tailCount, options.container) : instance.showStackLogs(tailCount, options.container);
 }).addHelpText("after", `
 Ejemplos:
   $ oton-pilot logs
   $ oton-pilot logs -f
-  $ oton-pilot logs -t 200 -r lambda-python-test`);
+  $ oton-pilot logs -t 200 -c my-container`);
 try {
   program2.parse(process.argv);
 } catch (error2) {
